@@ -8,11 +8,13 @@ import {
   Gamepad2,
   GraduationCap,
   Globe,
+  LockKeyhole,
   Menu,
   MessageSquareText,
   Moon,
   Radio,
   Send,
+  ShieldCheck,
   Sparkles,
   Sun,
   Users,
@@ -378,6 +380,7 @@ function App() {
         <Route path="wishes" element={<WishesPage />} />
         <Route path="nominations" element={<NominationsPage />} />
         <Route path="game" element={<GamePage />} />
+        <Route path="admin" element={<AdminPage />} />
       </Route>
     </Routes>
   )
@@ -777,6 +780,38 @@ function GamePage() {
   )
 }
 
+function AdminPage() {
+  return (
+    <section className="admin-page page-shell">
+      <PageIntro
+        icon={<LockKeyhole size={24} />}
+        label="Для организаторов"
+        title="Админ-панель"
+        text="Здесь будет рабочее место для модерации пожеланий после подключения backend и авторизации."
+      />
+
+      <div className="admin-placeholder">
+        <div className="admin-card">
+          <ShieldCheck size={34} />
+          <div>
+            <h2>Модерация пожеланий</h2>
+            <p>
+              Позже здесь появится список новых сообщений, действия “Одобрить” и “Отклонить”, а также
+              защищенный вход для организаторов.
+            </p>
+          </div>
+        </div>
+
+        <div className="admin-steps" aria-label="Будущий процесс модерации">
+          <span>1. Новое пожелание</span>
+          <span>2. Проверка организатором</span>
+          <span>3. Публикация на сайте</span>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 function SectionTitle({
   icon,
   label,
@@ -882,6 +917,10 @@ function Footer() {
           <Radio size={17} />
           MAX
         </a>
+        <Link to="/admin">
+          <LockKeyhole size={17} />
+          Для организаторов
+        </Link>
       </div>
 
       <div className="footer-devs">

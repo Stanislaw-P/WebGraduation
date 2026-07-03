@@ -540,6 +540,7 @@ h3 {
 .message-form,
 .wish-note,
 .sidebar-note,
+.admin-card,
 .game-placeholder {
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -1030,6 +1031,66 @@ h3 {
   margin-top: 12px;
 }
 
+.admin-page {
+  min-height: 72svh;
+}
+
+.admin-placeholder {
+  display: grid;
+  gap: 18px;
+  max-width: 860px;
+}
+
+.admin-card {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+  padding: 26px;
+}
+
+.admin-card > svg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  padding: 14px;
+  border-radius: 8px;
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--brand), var(--cyan));
+}
+
+.admin-card h2 {
+  font-size: clamp(28px, 4vw, 44px);
+}
+
+.admin-card p {
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.admin-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.admin-steps span {
+  display: flex;
+  align-items: center;
+  min-height: 54px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--brand-strong);
+  background: var(--surface-soft);
+  font-weight: 800;
+  line-height: 1.35;
+}
+
 .site-footer {
   display: grid;
   grid-template-columns: minmax(280px, 1fr) auto minmax(220px, 0.55fr);
@@ -1177,6 +1238,10 @@ h3 {
     position: static;
   }
 
+  .admin-steps {
+    grid-template-columns: 1fr;
+  }
+
   .site-footer {
     grid-template-columns: 1fr;
     align-items: flex-start;
@@ -1252,6 +1317,10 @@ h3 {
   .wish-note,
   .wish-note:hover {
     transform: none !important;
+  }
+
+  .admin-card {
+    grid-template-columns: 1fr;
   }
 
   .graduate-card,
