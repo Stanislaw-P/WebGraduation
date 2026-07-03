@@ -388,7 +388,7 @@ function App() {
 
 function Layout() {
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    return window.localStorage.getItem('graduation-theme') === 'dark' ? 'dark' : 'light'
+    return window.localStorage.getItem('graduation-theme') === 'light' ? 'light' : 'dark'
   })
   const [menuOpen, setMenuOpen] = useState(false)
   const location = useLocation()
