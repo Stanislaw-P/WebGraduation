@@ -37,6 +37,17 @@ type Nomination = {
   description: string
 }
 
+type WishTone = 'blue' | 'mint' | 'lemon' | 'rose' | 'violet'
+
+type Wish = {
+  id: number
+  text: string
+  tone: WishTone
+  x: number
+  y: number
+  rotate: number
+}
+
 const directions: Direction[] = [
   'Прикладная математика и информатика',
   'Информатика и вычислительная техника',
@@ -154,11 +165,151 @@ const graduates: Graduate[] = [
   },
 ]
 
-const messages = [
-  'Гордимся вами! Пусть диплом станет только началом большого пути.',
-  'Спасибо за эти годы, пары, проекты и общую атмосферу факультета.',
-  'Желаю каждому найти работу мечты и не забывать родной факультет.',
-  'Выпуск 2026, вы сделали это красиво.',
+const wishes: Wish[] = [
+  {
+    id: 1,
+    text: 'Пусть диплом станет началом дороги, на которой будет много смелых решений и хороших людей рядом.',
+    tone: 'blue',
+    x: 16,
+    y: 28,
+    rotate: -3,
+  },
+  {
+    id: 2,
+    text: 'Спасибо за атмосферу факультета, где формулы, код и дружба спокойно помещались в один семестр.',
+    tone: 'lemon',
+    x: 36,
+    y: 18,
+    rotate: 2,
+  },
+  {
+    id: 3,
+    text: 'Желаю каждому найти дело, ради которого хочется открывать ноутбук даже без дедлайна.',
+    tone: 'mint',
+    x: 62,
+    y: 30,
+    rotate: -2,
+  },
+  {
+    id: 4,
+    text: 'Выпуск 2026, вы сделали это красиво. Дальше будет еще интереснее.',
+    tone: 'rose',
+    x: 78,
+    y: 52,
+    rotate: 4,
+  },
+  {
+    id: 5,
+    text: 'Пусть в жизни компилируется главное, а ошибки помогают становиться сильнее.',
+    tone: 'violet',
+    x: 48,
+    y: 58,
+    rotate: -4,
+  },
+  {
+    id: 6,
+    text: 'Желаю не терять любопытство, потому что именно оно однажды привело вас сюда.',
+    tone: 'blue',
+    x: 24,
+    y: 70,
+    rotate: 3,
+  },
+  {
+    id: 7,
+    text: 'Пусть рядом всегда будут люди, с которыми можно решить любую задачу.',
+    tone: 'mint',
+    x: 70,
+    y: 76,
+    rotate: -1,
+  },
+  {
+    id: 8,
+    text: 'Гордимся вами и верим, что этот выпуск еще много раз удивит факультет.',
+    tone: 'lemon',
+    x: 54,
+    y: 84,
+    rotate: 2,
+  },
+  {
+    id: 9,
+    text: 'Пусть впереди будет больше радости от результата, чем тревоги перед защитой.',
+    tone: 'rose',
+    x: 84,
+    y: 22,
+    rotate: -3,
+  },
+  {
+    id: 10,
+    text: 'Не забывайте место, где первые большие проекты начинались с пустого файла.',
+    tone: 'violet',
+    x: 20,
+    y: 42,
+    rotate: -2,
+  },
+  {
+    id: 11,
+    text: 'Желаю уверенности на собеседованиях, спокойствия в релизах и радости в обычных днях.',
+    tone: 'blue',
+    x: 42,
+    y: 44,
+    rotate: 3,
+  },
+  {
+    id: 12,
+    text: 'Пусть каждая новая глава будет сложной ровно настолько, чтобы было интересно.',
+    tone: 'mint',
+    x: 60,
+    y: 46,
+    rotate: -2,
+  },
+  {
+    id: 13,
+    text: 'Вы доказали, что математика и компьютерные науки могут быть не только трудными, но и очень живыми.',
+    tone: 'lemon',
+    x: 32,
+    y: 86,
+    rotate: 4,
+  },
+  {
+    id: 14,
+    text: 'Пусть у каждого будет проект, которым хочется гордиться без дополнительных пояснений.',
+    tone: 'rose',
+    x: 76,
+    y: 36,
+    rotate: 2,
+  },
+  {
+    id: 15,
+    text: 'Желаю помнить не только оценки и зачеты, но и людей, которые были рядом эти годы.',
+    tone: 'blue',
+    x: 12,
+    y: 82,
+    rotate: -4,
+  },
+  {
+    id: 16,
+    text: 'Пусть взрослая жизнь будет не страшной задачей, а системой, которую можно понять и улучшить.',
+    tone: 'violet',
+    x: 88,
+    y: 70,
+    rotate: 3,
+  },
+  {
+    id: 17,
+    text: 'Спасибо за смех в коридорах, ночные правки и чувство, что все это было не зря.',
+    tone: 'mint',
+    x: 44,
+    y: 28,
+    rotate: -1,
+  },
+  {
+    id: 18,
+    text: 'Пусть после выпуска будет много поводов возвращаться сюда уже с хорошими новостями.',
+    tone: 'lemon',
+    x: 66,
+    y: 62,
+    rotate: 2,
+  },
 ]
 
 const nominations: Nomination[] = [
@@ -219,6 +370,7 @@ function App() {
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
         <Route path="graduates" element={<GraduatesPage />} />
+        <Route path="wishes" element={<WishesPage />} />
         <Route path="nominations" element={<NominationsPage />} />
         <Route path="game" element={<GamePage />} />
       </Route>
@@ -283,6 +435,7 @@ function Layout() {
               {item.label}
             </button>
           ))}
+          <Link to="/wishes">Пожелания</Link>
           <Link to="/nominations">Номинации</Link>
           <Link to="/game">Игра</Link>
         </nav>
@@ -420,6 +573,46 @@ function HomePage() {
 }
 
 function WallSection() {
+  return (
+    <section className="wall-section section-shell" id="wall">
+      <SectionTitle
+        icon={<MessageSquareText size={22} />}
+        label="Стена поздравлений"
+        title="Созвездие пожеланий"
+        text="Наведи курсор на звезду, чтобы прочитать пожелание. Здесь показаны статичные поздравления, а новые сообщения отправляются на модерацию."
+      />
+
+      <div className="wall-layout">
+        <div className="wish-constellation" aria-label="Созвездие пожеланий">
+          <svg className="constellation-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <polyline points="16,28 36,18 62,30 84,22 78,52 70,76 54,84 24,70 48,58 16,28" />
+            <polyline points="36,18 48,58 62,30" />
+            <polyline points="24,70 16,28" />
+          </svg>
+
+          {wishes.slice(0, 9).map((wish) => (
+            <button
+              className={`wish-star ${wish.x > 66 ? 'from-right' : ''} ${
+                wish.y < 36 ? 'from-top' : ''
+              } is-${wish.tone}`}
+              key={wish.id}
+              style={{ left: `${wish.x}%`, top: `${wish.y}%` }}
+              type="button"
+              aria-label={wish.text}
+            >
+              <span className="star-core" />
+              <span className={`wish-popover is-${wish.tone}`}>{wish.text}</span>
+            </button>
+          ))}
+        </div>
+
+        <WishForm />
+      </div>
+    </section>
+  )
+}
+
+function WishForm() {
   const [message, setMessage] = useState('')
   const [submitted, setSubmitted] = useState(false)
 
@@ -434,44 +627,24 @@ function WallSection() {
   }
 
   return (
-    <section className="wall-section section-shell" id="wall">
-      <SectionTitle
-        icon={<MessageSquareText size={22} />}
-        label="Стена поздравлений"
-        title="Анонимные пожелания выпускникам"
-        text="Сообщения будут проходить модерацию, поэтому после отправки они не появляются на стене сразу."
+    <form className="message-form" onSubmit={handleSubmit}>
+      <label htmlFor="message">Ваше пожелание</label>
+      <textarea
+        id="message"
+        value={message}
+        maxLength={150}
+        onChange={(event) => {
+          setMessage(event.target.value)
+          setSubmitted(false)
+        }}
+        placeholder="Напишите короткое поздравление..."
       />
-
-      <div className="wall-layout">
-        <form className="message-form" onSubmit={handleSubmit}>
-          <label htmlFor="message">Ваше пожелание</label>
-          <textarea
-            id="message"
-            value={message}
-            maxLength={150}
-            onChange={(event) => {
-              setMessage(event.target.value)
-              setSubmitted(false)
-            }}
-            placeholder="Напишите короткое поздравление..."
-          />
-          <div className="form-footer">
-            <span>{message.length}/150</span>
-            <button type="submit">Отправить</button>
-          </div>
-          {submitted && <p className="form-note">Сообщение отправлено на модерацию.</p>}
-        </form>
-
-        <div className="message-grid">
-          {messages.map((item) => (
-            <article className="message-card" key={item}>
-              <Sparkles size={18} />
-              <p>{item}</p>
-            </article>
-          ))}
-        </div>
+      <div className="form-footer">
+        <span>{message.length}/150</span>
+        <button type="submit">Отправить</button>
       </div>
-    </section>
+      {submitted && <p className="form-note">Сообщение отправлено на модерацию.</p>}
+    </form>
   )
 }
 
@@ -517,6 +690,36 @@ function GraduatesPage() {
   )
 }
 
+function WishesPage() {
+  return (
+    <section className="page-shell wishes-page">
+      <PageIntro
+        icon={<MessageSquareText size={24} />}
+        label="Пожелания"
+        title="Стена пожеланий"
+        text="Здесь собраны поздравления выпускникам. Позже эта мозаика будет наполняться реальными одобренными сообщениями."
+      />
+
+      <div className="wishes-page-layout">
+        <div className="wish-mosaic">
+          {wishes.map((wish, index) => (
+            <WishNote key={wish.id} wish={wish} index={index} />
+          ))}
+        </div>
+
+        <aside className="wishes-sidebar">
+          <div className="sidebar-note">
+            <Sparkles size={20} />
+            <h2>Оставить пожелание</h2>
+            <p>Сообщение не появится сразу: сначала оно попадет на модерацию.</p>
+          </div>
+          <WishForm />
+        </aside>
+      </div>
+    </section>
+  )
+}
+
 function NominationsPage() {
   return (
     <section className="page-shell">
@@ -533,6 +736,18 @@ function NominationsPage() {
         ))}
       </div>
     </section>
+  )
+}
+
+function WishNote({ wish, index }: { wish: Wish; index: number }) {
+  return (
+    <article
+      className={`wish-note is-${wish.tone} size-${(index % 4) + 1}`}
+      style={{ transform: `rotate(${wish.rotate}deg)` }}
+    >
+      <span className="note-tape" />
+      <p>{wish.text}</p>
+    </article>
   )
 }
 

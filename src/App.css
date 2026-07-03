@@ -538,6 +538,8 @@ h3 {
 .nomination-card,
 .message-card,
 .message-form,
+.wish-note,
+.sidebar-note,
 .game-placeholder {
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -612,9 +614,147 @@ h3 {
 
 .wall-layout {
   display: grid;
-  grid-template-columns: 0.8fr 1.2fr;
+  grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
   gap: 22px;
   align-items: start;
+}
+
+.wish-constellation {
+  position: relative;
+  min-height: 520px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 18% 22%, color-mix(in srgb, var(--brand) 18%, transparent), transparent 28%),
+    radial-gradient(circle at 72% 68%, color-mix(in srgb, var(--cyan) 18%, transparent), transparent 30%),
+    linear-gradient(135deg, color-mix(in srgb, var(--surface) 94%, var(--brand)), var(--surface));
+  box-shadow: var(--shadow-soft);
+  overflow: visible;
+}
+
+.wish-constellation::before {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, color-mix(in srgb, var(--brand) 28%, transparent) 1px, transparent 1px),
+    radial-gradient(circle, color-mix(in srgb, var(--cyan) 22%, transparent) 1px, transparent 1px);
+  background-position:
+    0 0,
+    18px 22px;
+  background-size:
+    44px 44px,
+    68px 68px;
+  content: '';
+  opacity: 0.42;
+}
+
+.constellation-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.constellation-lines polyline {
+  fill: none;
+  stroke: color-mix(in srgb, var(--brand) 42%, transparent);
+  stroke-dasharray: 2 4;
+  stroke-linecap: round;
+  stroke-width: 0.45;
+}
+
+.wish-star {
+  position: absolute;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  transform: translate(-50%, -50%);
+}
+
+.star-core {
+  position: relative;
+  display: block;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow:
+    0 0 0 5px color-mix(in srgb, var(--brand) 18%, transparent),
+    0 0 24px color-mix(in srgb, var(--brand) 74%, transparent);
+}
+
+.star-core::before,
+.star-core::after {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 24px;
+  height: 2px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--brand) 72%, transparent);
+  content: '';
+  transform: translate(-50%, -50%);
+}
+
+.star-core::after {
+  width: 2px;
+  height: 24px;
+}
+
+.wish-popover {
+  position: absolute;
+  left: 22px;
+  bottom: 22px;
+  width: min(260px, 42vw);
+  padding: 14px 16px;
+  border: 1px solid color-mix(in srgb, var(--brand) 18%, var(--line));
+  border-radius: 8px;
+  color: #1b2133;
+  box-shadow: 0 20px 50px rgba(19, 24, 41, 0.18);
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.45;
+  opacity: 0;
+  pointer-events: none;
+  text-align: left;
+  transform: translateY(8px) scale(0.96);
+  transform-origin: bottom left;
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.wish-star.from-right .wish-popover {
+  right: 22px;
+  left: auto;
+  transform-origin: bottom right;
+}
+
+.wish-star.from-top .wish-popover {
+  top: 22px;
+  bottom: auto;
+  transform-origin: top left;
+}
+
+.wish-star.from-right.from-top .wish-popover {
+  transform-origin: top right;
+}
+
+.wish-star:hover,
+.wish-star:focus-visible {
+  z-index: 4;
+}
+
+.wish-star:hover .wish-popover,
+.wish-star:focus-visible .wish-popover {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 .message-form {
@@ -674,6 +814,119 @@ h3 {
 
 .message-card svg {
   color: var(--gold);
+}
+
+.wishes-page-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 28px;
+  align-items: start;
+}
+
+.wish-mosaic {
+  columns: 3 230px;
+  column-gap: 18px;
+}
+
+.wish-note {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  min-height: 150px;
+  margin: 0 0 18px;
+  padding: 34px 20px 20px;
+  break-inside: avoid;
+  color: #1b2133;
+  box-shadow: 0 16px 34px rgba(19, 24, 41, 0.12);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.wish-note:hover {
+  box-shadow: 0 24px 50px rgba(19, 24, 41, 0.16);
+}
+
+.wish-note p {
+  color: #1b2133;
+  font-size: 16px;
+  font-weight: 650;
+  line-height: 1.55;
+}
+
+.wish-note.size-2 {
+  min-height: 188px;
+}
+
+.wish-note.size-3 {
+  min-height: 132px;
+}
+
+.wish-note.size-4 {
+  min-height: 220px;
+}
+
+.note-tape {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  width: 74px;
+  height: 18px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 1px 5px rgba(19, 24, 41, 0.1);
+  transform: translateX(-50%) rotate(-2deg);
+}
+
+.wish-popover.is-blue,
+.wish-note.is-blue {
+  background: #dfeaff;
+}
+
+.wish-popover.is-mint,
+.wish-note.is-mint {
+  background: #dcf7ed;
+}
+
+.wish-popover.is-lemon,
+.wish-note.is-lemon {
+  background: #fff3c7;
+}
+
+.wish-popover.is-rose,
+.wish-note.is-rose {
+  background: #ffe1ec;
+}
+
+.wish-popover.is-violet,
+.wish-note.is-violet {
+  background: #eee5ff;
+}
+
+.wishes-sidebar {
+  position: sticky;
+  top: 96px;
+  display: grid;
+  gap: 16px;
+}
+
+.sidebar-note {
+  padding: 20px;
+}
+
+.sidebar-note svg {
+  color: var(--gold);
+}
+
+.sidebar-note h2 {
+  margin-top: 12px;
+  font-size: 28px;
+}
+
+.sidebar-note p {
+  margin-top: 10px;
+  color: var(--muted);
+  line-height: 1.55;
 }
 
 .nomination-card {
@@ -824,6 +1077,7 @@ h3 {
 
   .hero-section,
   .wall-layout,
+  .wishes-page-layout,
   .game-banner {
     grid-template-columns: 1fr;
   }
@@ -842,6 +1096,10 @@ h3 {
   .nominations-grid,
   .nomination-row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .wishes-sidebar {
+    position: static;
   }
 }
 
@@ -885,6 +1143,26 @@ h3 {
   .nomination-row,
   .message-grid {
     grid-template-columns: 1fr;
+  }
+
+  .wish-constellation {
+    min-height: 430px;
+  }
+
+  .wish-popover {
+    left: 18px;
+    bottom: 18px;
+    width: min(230px, 68vw);
+    font-size: 13px;
+  }
+
+  .wish-mosaic {
+    columns: 1;
+  }
+
+  .wish-note,
+  .wish-note:hover {
+    transform: none !important;
   }
 
   .graduate-card,
