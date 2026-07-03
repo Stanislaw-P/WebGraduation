@@ -513,7 +513,7 @@ function HomePage() {
           <span className="formula formula-one">∫f(x)dx</span>
           <span className="formula formula-two">O(n log n)</span>
           <span className="formula formula-three">f(x)=sin(2x)</span>
-          <span className="code-chip">&lt;graduation /&gt;</span>
+          <span className="code-chip">C#</span>
         </div>
       </section>
 
@@ -887,7 +887,7 @@ function Footer() {
       <div className="footer-devs">
         <span>Разработка сайта</span>
         <p>Caucasian IT</p>
-        <small>Персаев Станислав, Тибилов Герман</small>
+        <small>Персаев Станислав, Персаев Владислав, Тибилов Герман</small>
       </div>
     </footer>
   )
