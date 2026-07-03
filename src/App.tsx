@@ -516,7 +516,7 @@ function HomePage() {
           <span className="formula formula-one">∫f(x)dx</span>
           <span className="formula formula-two">O(n log n)</span>
           <span className="formula formula-three">f(x)=sin(2x)</span>
-          <span className="code-chip">C#</span>
+          <span className="code-chip">"Hello, World!"</span>
         </div>
       </section>
 
