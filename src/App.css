@@ -626,9 +626,9 @@ h3 {
   border: 1px solid var(--line);
   border-radius: 8px;
   background:
-    radial-gradient(circle at 18% 22%, color-mix(in srgb, var(--brand) 18%, transparent), transparent 28%),
-    radial-gradient(circle at 72% 68%, color-mix(in srgb, var(--cyan) 18%, transparent), transparent 30%),
-    linear-gradient(135deg, color-mix(in srgb, var(--surface) 94%, var(--brand)), var(--surface));
+    radial-gradient(circle at 18% 22%, rgba(125, 162, 255, 0.16), transparent 28%),
+    radial-gradient(circle at 72% 68%, rgba(22, 184, 199, 0.13), transparent 30%),
+    linear-gradient(135deg, #121a31, #18233d 48%, #101728);
   box-shadow: var(--shadow-soft);
   overflow: visible;
 }
@@ -636,22 +636,49 @@ h3 {
 .wish-constellation::before {
   position: absolute;
   inset: 0;
+  z-index: 0;
   background-image:
-    radial-gradient(circle, color-mix(in srgb, var(--brand) 28%, transparent) 1px, transparent 1px),
-    radial-gradient(circle, color-mix(in srgb, var(--cyan) 22%, transparent) 1px, transparent 1px);
-  background-position:
-    0 0,
-    18px 22px;
-  background-size:
-    44px 44px,
-    68px 68px;
+    radial-gradient(circle at 7% 14%, rgba(255, 255, 255, 0.34) 0 1px, transparent 1.7px),
+    radial-gradient(circle at 13% 73%, rgba(125, 162, 255, 0.28) 0 1.2px, transparent 2px),
+    radial-gradient(circle at 19% 39%, rgba(255, 255, 255, 0.2) 0 0.8px, transparent 1.6px),
+    radial-gradient(circle at 24% 88%, rgba(255, 255, 255, 0.26) 0 1px, transparent 1.8px),
+    radial-gradient(circle at 29% 18%, rgba(125, 162, 255, 0.22) 0 1px, transparent 1.7px),
+    radial-gradient(circle at 35% 63%, rgba(255, 255, 255, 0.32) 0 1.1px, transparent 1.9px),
+    radial-gradient(circle at 41% 9%, rgba(255, 255, 255, 0.18) 0 0.8px, transparent 1.5px),
+    radial-gradient(circle at 46% 78%, rgba(22, 184, 199, 0.22) 0 1px, transparent 1.8px),
+    radial-gradient(circle at 52% 24%, rgba(255, 255, 255, 0.28) 0 1px, transparent 1.7px),
+    radial-gradient(circle at 57% 91%, rgba(255, 255, 255, 0.22) 0 0.9px, transparent 1.6px),
+    radial-gradient(circle at 63% 12%, rgba(125, 162, 255, 0.26) 0 1.2px, transparent 2px),
+    radial-gradient(circle at 68% 54%, rgba(255, 255, 255, 0.2) 0 0.9px, transparent 1.6px),
+    radial-gradient(circle at 73% 32%, rgba(255, 255, 255, 0.32) 0 1px, transparent 1.8px),
+    radial-gradient(circle at 79% 84%, rgba(125, 162, 255, 0.24) 0 1px, transparent 1.8px),
+    radial-gradient(circle at 84% 19%, rgba(255, 255, 255, 0.18) 0 0.8px, transparent 1.5px),
+    radial-gradient(circle at 88% 68%, rgba(255, 255, 255, 0.3) 0 1.1px, transparent 1.9px),
+    radial-gradient(circle at 94% 42%, rgba(22, 184, 199, 0.2) 0 1px, transparent 1.8px),
+    radial-gradient(circle at 5% 51%, rgba(255, 255, 255, 0.18) 0 0.7px, transparent 1.4px),
+    radial-gradient(circle at 11% 26%, rgba(125, 162, 255, 0.36) 0 1.4px, transparent 2.2px),
+    radial-gradient(circle at 16% 91%, rgba(255, 255, 255, 0.14) 0 0.6px, transparent 1.3px),
+    radial-gradient(circle at 27% 52%, rgba(255, 255, 255, 0.24) 0 0.9px, transparent 1.6px),
+    radial-gradient(circle at 33% 81%, rgba(22, 184, 199, 0.18) 0 0.8px, transparent 1.5px),
+    radial-gradient(circle at 39% 35%, rgba(255, 255, 255, 0.16) 0 0.7px, transparent 1.4px),
+    radial-gradient(circle at 44% 16%, rgba(255, 255, 255, 0.4) 0 1.5px, transparent 2.3px),
+    radial-gradient(circle at 49% 67%, rgba(125, 162, 255, 0.2) 0 0.9px, transparent 1.6px),
+    radial-gradient(circle at 55% 7%, rgba(255, 255, 255, 0.2) 0 0.8px, transparent 1.5px),
+    radial-gradient(circle at 60% 74%, rgba(255, 255, 255, 0.34) 0 1.2px, transparent 2px),
+    radial-gradient(circle at 66% 23%, rgba(22, 184, 199, 0.16) 0 0.7px, transparent 1.4px),
+    radial-gradient(circle at 71% 9%, rgba(255, 255, 255, 0.15) 0 0.7px, transparent 1.4px),
+    radial-gradient(circle at 76% 61%, rgba(125, 162, 255, 0.32) 0 1.3px, transparent 2.1px),
+    radial-gradient(circle at 83% 93%, rgba(255, 255, 255, 0.18) 0 0.8px, transparent 1.5px),
+    radial-gradient(circle at 91% 13%, rgba(255, 255, 255, 0.26) 0 1px, transparent 1.8px),
+    radial-gradient(circle at 97% 79%, rgba(255, 255, 255, 0.16) 0 0.7px, transparent 1.4px);
   content: '';
-  opacity: 0.42;
+  opacity: 0.55;
 }
 
 .constellation-lines {
   position: absolute;
   inset: 0;
+  z-index: 1;
   width: 100%;
   height: 100%;
   overflow: visible;

@@ -177,72 +177,72 @@ const wishes: Wish[] = [
     id: 1,
     text: 'Пусть диплом станет началом дороги, на которой будет много смелых решений и хороших людей рядом.',
     tone: 'blue',
-    x: 16,
-    y: 28,
+    x: 24,
+    y: 72,
     rotate: -3,
   },
   {
     id: 2,
     text: 'Спасибо за атмосферу факультета, где формулы, код и дружба спокойно помещались в один семестр.',
     tone: 'lemon',
-    x: 36,
-    y: 18,
+    x: 30,
+    y: 58,
     rotate: 2,
   },
   {
     id: 3,
     text: 'Желаю каждому найти дело, ради которого хочется открывать ноутбук даже без дедлайна.',
     tone: 'mint',
-    x: 62,
-    y: 30,
+    x: 38,
+    y: 44,
     rotate: -2,
   },
   {
     id: 4,
     text: 'Выпуск 2026, вы сделали это красиво. Дальше будет еще интереснее.',
     tone: 'rose',
-    x: 78,
-    y: 52,
+    x: 32,
+    y: 30,
     rotate: 4,
   },
   {
     id: 5,
     text: 'Пусть в жизни компилируется главное, а ошибки помогают становиться сильнее.',
     tone: 'violet',
-    x: 48,
-    y: 58,
+    x: 21,
+    y: 24,
     rotate: -4,
   },
   {
     id: 6,
     text: 'Желаю не терять любопытство, потому что именно оно однажды привело вас сюда.',
     tone: 'blue',
-    x: 24,
-    y: 70,
+    x: 17,
+    y: 39,
     rotate: 3,
   },
   {
     id: 7,
     text: 'Пусть рядом всегда будут люди, с которыми можно решить любую задачу.',
     tone: 'mint',
-    x: 70,
-    y: 76,
+    x: 60,
+    y: 42,
     rotate: -1,
   },
   {
     id: 8,
     text: 'Гордимся вами и верим, что этот выпуск еще много раз удивит факультет.',
     tone: 'lemon',
-    x: 54,
-    y: 84,
+    x: 82,
+    y: 35,
     rotate: 2,
   },
   {
     id: 9,
     text: 'Пусть впереди будет больше радости от результата, чем тревоги перед защитой.',
     tone: 'rose',
-    x: 84,
-    y: 22,
+    x: 67,
+    y: 62,
     rotate: -3,
   },
   {
@@ -593,15 +593,16 @@ function WallSection() {
       <div className="wall-layout">
         <div className="wish-constellation" aria-label="Созвездие пожеланий">
           <svg className="constellation-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-            <polyline points="16,28 36,18 62,30 84,22 78,52 70,76 54,84 24,70 48,58 16,28" />
-            <polyline points="36,18 48,58 62,30" />
-            <polyline points="24,70 16,28" />
+            <polyline points="24,72 30,58 38,44 32,30 21,24 17,39 38,44" />
+            <polyline points="38,44 60,42 82,35" />
+            <polyline points="24,72 67,62 82,35" />
+            <polyline points="60,42 67,62" />
           </svg>
 
           {wishes.slice(0, 9).map((wish) => (
             <button
               className={`wish-star ${wish.x > 66 ? 'from-right' : ''} ${
-                wish.y < 36 ? 'from-top' : ''
+                wish.y < 45 ? 'from-top' : ''
               } is-${wish.tone}`}
               key={wish.id}
               style={{ left: `${wish.x}%`, top: `${wish.y}%` }}
