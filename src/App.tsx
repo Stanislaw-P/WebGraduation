@@ -23,6 +23,7 @@ import {
 import { Link, Outlet, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import facultyLogo from './assets/logo/logo-square.png'
 import facultyLogoFull from './assets/logo/logo-full.jpg'
+import deanPortrait from './assets/people/dean.png'
 import './App.css'
 
 type Direction =
@@ -520,6 +521,8 @@ function HomePage() {
         </div>
       </section>
 
+      <DeanSpeechSection />
+
       <section className="section-shell" id="graduates-preview">
         <SectionTitle
           icon={<BookOpen size={22} />}
@@ -569,7 +572,7 @@ function HomePage() {
             Игра
           </div>
           <h2>Отдельная игровая страница уже готова к подключению</h2>
-          <p>Пока здесь заглушка. Позже разработчик игры сможет встроить свой компонент на страницу.</p>
+          <p>Пока здесь заглушка. Позже Герман закинет игру</p>
         </div>
         <Link className="primary-link" to="/game">
           Перейти к игре
@@ -577,6 +580,72 @@ function HomePage() {
         </Link>
       </section>
     </>
+  )
+}
+
+function DeanSpeechSection() {
+  const [expanded, setExpanded] = useState(false)
+
+  return (
+    <section className="dean-section section-shell" id="dean-word">
+      <div className="dean-portrait-card">
+        <div className="dean-math-bg" aria-hidden="true">
+          <span>ε</span>
+          <span>δ</span>
+          <span>lim</span>
+        </div>
+        <img src={deanPortrait} alt="Руслан Черменович" />
+        <div className="dean-caption">
+          <strong>Руслан Черменович</strong>
+          <span>Декан факультета математики и компьютерных наук</span>
+        </div>
+      </div>
+
+      <article className="dean-speech">
+        <div className="eyebrow">
+          <Sparkles size={18} />
+          Слово декана
+        </div>
+        <h2>Дорогие выпускники факультета математики и компьютерных наук!</h2>
+        <blockquote>
+          Желаю вам, чтобы в жизни, как в хорошем доказательстве, всегда находился элегантный путь.
+        </blockquote>
+
+        <div className="speech-text">
+          <p>
+            Ну вот и всё — эпсилон-дельта окрестности остались в прошлом. Вы пережили меня, мои
+            экзамены, мои замечания и бесконечные коллоквиумы.
+          </p>
+          <p>
+            Помню, как на первом курсе многие смотрели на предел функции как на личного врага, а к
+            третьему курсу — сами могли невозмутимо объяснить его первокурсникам. Это и есть рост.
+          </p>
+
+          {expanded && (
+            <>
+              <p>
+                Пусть код компилируется, теоремы доказываются, а жизнь удивляет приятнее, чем
+                неожиданный вопрос на экзамене.
+              </p>
+              <div className="dean-rules" aria-label="Три главных правила успешного человека">
+                <span>Учиться у жизни каждый день.</span>
+                <span>Ценить время и людей вокруг.</span>
+                <span>Никогда не останавливаться на достигнутом.</span>
+              </div>
+              <p>
+                С вами порой было трудно, но никогда не было скучно. Спасибо, что были моими
+                студентами. Горжусь вами, а не ругаюсь (по крайней мере, вслух)!
+              </p>
+              <p className="speech-signature">Ваш Руслан Черменович</p>
+            </>
+          )}
+        </div>
+
+        <button className="read-more-button" type="button" onClick={() => setExpanded((value) => !value)}>
+          {expanded ? 'Свернуть обращение' : 'Читать полностью'}
+        </button>
+      </article>
+    </section>
   )
 }
 
@@ -884,7 +953,6 @@ function NominationCard({ nomination }: { nomination: Nomination }) {
         <span>Номинация</span>
         <h3>{nomination.title}</h3>
         <strong>{nomination.winner}</strong>
-        <p>{nomination.description}</p>
       </div>
     </article>
   )
