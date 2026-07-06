@@ -746,8 +746,6 @@ h3 {
 .nomination-card,
 .message-card,
 .message-form,
-.wish-note,
-.sidebar-note,
 .admin-card,
 .game-placeholder {
   border: 1px solid var(--line);
@@ -826,6 +824,10 @@ h3 {
   grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
   gap: 22px;
   align-items: start;
+}
+
+.teacher-wall {
+  grid-template-columns: 1fr;
 }
 
 .wish-constellation {
@@ -945,6 +947,8 @@ h3 {
 
 .wish-popover {
   position: absolute;
+  display: grid;
+  gap: 6px;
   left: 22px;
   bottom: 22px;
   width: min(260px, 42vw);
@@ -964,6 +968,15 @@ h3 {
   transition:
     opacity 160ms ease,
     transform 160ms ease;
+}
+
+.wish-popover strong {
+  color: #1b2133;
+  font-size: 13px;
+}
+
+.wish-popover span {
+  display: block;
 }
 
 .wish-star.from-right .wish-popover {
@@ -1052,117 +1065,24 @@ h3 {
   color: var(--gold);
 }
 
-.wishes-page-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 360px;
-  gap: 28px;
-  align-items: start;
-}
-
-.wish-mosaic {
-  columns: 3 230px;
-  column-gap: 18px;
-}
-
-.wish-note {
-  position: relative;
-  display: inline-block;
-  width: 100%;
-  min-height: 150px;
-  margin: 0 0 18px;
-  padding: 34px 20px 20px;
-  break-inside: avoid;
-  color: #1b2133;
-  box-shadow: 0 16px 34px rgba(19, 24, 41, 0.12);
-  transition:
-    transform 180ms ease,
-    box-shadow 180ms ease;
-}
-
-.wish-note:hover {
-  box-shadow: 0 24px 50px rgba(19, 24, 41, 0.16);
-}
-
-.wish-note p {
-  color: #1b2133;
-  font-size: 16px;
-  font-weight: 650;
-  line-height: 1.55;
-}
-
-.wish-note.size-2 {
-  min-height: 188px;
-}
-
-.wish-note.size-3 {
-  min-height: 132px;
-}
-
-.wish-note.size-4 {
-  min-height: 220px;
-}
-
-.note-tape {
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  width: 74px;
-  height: 18px;
-  border-radius: 3px;
-  background: rgba(255, 255, 255, 0.55);
-  box-shadow: 0 1px 5px rgba(19, 24, 41, 0.1);
-  transform: translateX(-50%) rotate(-2deg);
-}
-
-.wish-popover.is-blue,
-.wish-note.is-blue {
+.wish-popover.is-blue {
   background: #dfeaff;
 }
 
-.wish-popover.is-mint,
-.wish-note.is-mint {
+.wish-popover.is-mint {
   background: #dcf7ed;
 }
 
-.wish-popover.is-lemon,
-.wish-note.is-lemon {
+.wish-popover.is-lemon {
   background: #fff3c7;
 }
 
-.wish-popover.is-rose,
-.wish-note.is-rose {
+.wish-popover.is-rose {
   background: #ffe1ec;
 }
 
-.wish-popover.is-violet,
-.wish-note.is-violet {
+.wish-popover.is-violet {
   background: #eee5ff;
-}
-
-.wishes-sidebar {
-  position: sticky;
-  top: 96px;
-  display: grid;
-  gap: 16px;
-}
-
-.sidebar-note {
-  padding: 20px;
-}
-
-.sidebar-note svg {
-  color: var(--gold);
-}
-
-.sidebar-note h2 {
-  margin-top: 12px;
-  font-size: 28px;
-}
-
-.sidebar-note p {
-  margin-top: 10px;
-  color: var(--muted);
-  line-height: 1.55;
 }
 
 .nomination-card {
@@ -1466,7 +1386,6 @@ h3 {
   .hero-section,
   .dean-section,
   .wall-layout,
-  .wishes-page-layout,
   .game-banner {
     grid-template-columns: 1fr;
   }
@@ -1493,10 +1412,6 @@ h3 {
   .nominations-grid,
   .nomination-row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .wishes-sidebar {
-    position: static;
   }
 
   .admin-steps {
@@ -1601,15 +1516,6 @@ h3 {
     bottom: 18px;
     width: min(230px, 68vw);
     font-size: 13px;
-  }
-
-  .wish-mosaic {
-    columns: 1;
-  }
-
-  .wish-note,
-  .wish-note:hover {
-    transform: none !important;
   }
 
   .admin-card {

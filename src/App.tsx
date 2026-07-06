@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import type { FormEvent, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import {
   ArrowRight,
   Award,
@@ -320,6 +320,27 @@ const wishes: Wish[] = [
   },
 ]
 
+const teacherAuthors = [
+  'Руслан Черменович',
+  'Преподаватель матанализа',
+  'Преподаватель программирования',
+  'Преподаватель алгебры',
+  'Преподаватель информатики',
+  'Преподаватель педагогики',
+  'Преподаватель дискретной математики',
+  'Преподаватель кафедры ИВТ',
+  'Преподаватель факультета',
+  'Преподаватель кафедры ПМИ',
+  'Преподаватель операционных систем',
+  'Преподаватель математической логики',
+  'Преподаватель теории вероятностей',
+  'Преподаватель баз данных',
+  'Преподаватель численных методов',
+  'Преподаватель веб-разработки',
+  'Преподаватель кафедры педагогики',
+  'Преподаватель факультета',
+]
+
 const nominations: Nomination[] = [
   {
     id: 1,
@@ -378,7 +399,6 @@ function App() {
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
         <Route path="graduates" element={<GraduatesPage />} />
-        <Route path="wishes" element={<WishesPage />} />
         <Route path="nominations" element={<NominationsPage />} />
         <Route path="game" element={<GamePage />} />
         <Route path="admin" element={<AdminPage />} />
@@ -444,7 +464,6 @@ function Layout() {
               {item.label}
             </button>
           ))}
-          <Link to="/wishes">Пожелания</Link>
           <Link to="/nominations">Номинации</Link>
           <Link to="/game">Игра</Link>
         </nav>
@@ -654,12 +673,12 @@ function WallSection() {
     <section className="wall-section section-shell" id="wall">
       <SectionTitle
         icon={<MessageSquareText size={22} />}
-        label="Стена поздравлений"
-        title="Созвездие пожеланий"
-        text="Наведи курсор на звезду, чтобы прочитать пожелание. Здесь показаны статичные поздравления, а новые сообщения отправляются на модерацию."
+        label="Поздравления"
+        title="Созвездие преподавателей"
+        text="Наведи курсор на звезду, чтобы прочитать поздравление от преподавателей факультета."
       />
 
-      <div className="wall-layout">
+      <div className="wall-layout teacher-wall">
         <div className="wish-constellation" aria-label="Созвездие пожеланий">
           <svg className="constellation-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
             <polyline points="24,72 30,58 38,44 32,30 21,24 17,39 38,44" />
@@ -668,7 +687,7 @@ function WallSection() {
             <polyline points="60,42 67,62" />
           </svg>
 
-          {wishes.slice(0, 9).map((wish) => (
+          {wishes.slice(0, 9).map((wish, index) => (
             <button
               className={`wish-star ${wish.x > 66 ? 'from-right' : ''} ${
                 wish.y < 45 ? 'from-top' : ''
@@ -676,53 +695,18 @@ function WallSection() {
               key={wish.id}
               style={{ left: `${wish.x}%`, top: `${wish.y}%` }}
               type="button"
-              aria-label={wish.text}
+              aria-label={`${teacherAuthors[index]}: ${wish.text}`}
             >
               <span className="star-core" />
-              <span className={`wish-popover is-${wish.tone}`}>{wish.text}</span>
+              <span className={`wish-popover is-${wish.tone}`}>
+                <strong>{teacherAuthors[index]}</strong>
+                <span>{wish.text}</span>
+              </span>
             </button>
           ))}
         </div>
-
-        <WishForm />
       </div>
     </section>
-  )
-}
-
-function WishForm() {
-  const [message, setMessage] = useState('')
-  const [submitted, setSubmitted] = useState(false)
-
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    if (!message.trim()) {
-      return
-    }
-
-    setSubmitted(true)
-    setMessage('')
-  }
-
-  return (
-    <form className="message-form" onSubmit={handleSubmit}>
-      <label htmlFor="message">Ваше пожелание</label>
-      <textarea
-        id="message"
-        value={message}
-        maxLength={150}
-        onChange={(event) => {
-          setMessage(event.target.value)
-          setSubmitted(false)
-        }}
-        placeholder="Напишите короткое поздравление..."
-      />
-      <div className="form-footer">
-        <span>{message.length}/150</span>
-        <button type="submit">Отправить</button>
-      </div>
-      {submitted && <p className="form-note">Сообщение отправлено на модерацию.</p>}
-    </form>
   )
 }
 
@@ -768,36 +752,6 @@ function GraduatesPage() {
   )
 }
 
-function WishesPage() {
-  return (
-    <section className="page-shell wishes-page">
-      <PageIntro
-        icon={<MessageSquareText size={24} />}
-        label="Пожелания"
-        title="Стена пожеланий"
-        text="Здесь собраны поздравления выпускникам. Позже эта мозаика будет наполняться реальными одобренными сообщениями."
-      />
-
-      <div className="wishes-page-layout">
-        <div className="wish-mosaic">
-          {wishes.map((wish, index) => (
-            <WishNote key={wish.id} wish={wish} index={index} />
-          ))}
-        </div>
-
-        <aside className="wishes-sidebar">
-          <div className="sidebar-note">
-            <Sparkles size={20} />
-            <h2>Оставить пожелание</h2>
-            <p>Сообщение не появится сразу: сначала оно попадет на модерацию.</p>
-          </div>
-          <WishForm />
-        </aside>
-      </div>
-    </section>
-  )
-}
-
 function NominationsPage() {
   return (
     <section className="page-shell">
@@ -814,18 +768,6 @@ function NominationsPage() {
         ))}
       </div>
     </section>
-  )
-}
-
-function WishNote({ wish, index }: { wish: Wish; index: number }) {
-  return (
-    <article
-      className={`wish-note is-${wish.tone} size-${(index % 4) + 1}`}
-      style={{ transform: `rotate(${wish.rotate}deg)` }}
-    >
-      <span className="note-tape" />
-      <p>{wish.text}</p>
-    </article>
   )
 }
 
@@ -857,24 +799,24 @@ function AdminPage() {
         icon={<LockKeyhole size={24} />}
         label="Для организаторов"
         title="Админ-панель"
-        text="Здесь будет рабочее место для модерации пожеланий после подключения backend и авторизации."
+        text="Здесь позже появится рабочее место для обновления контента сайта после подключения backend и авторизации."
       />
 
       <div className="admin-placeholder">
         <div className="admin-card">
           <ShieldCheck size={34} />
           <div>
-            <h2>Модерация пожеланий</h2>
+            <h2>Управление поздравлениями</h2>
             <p>
-              Позже здесь появится список новых сообщений, действия “Одобрить” и “Отклонить”, а также
-              защищенный вход для организаторов.
+              Позже здесь можно будет обновлять поздравления преподавателей, данные выпускников и
+              номинации через защищенный вход для организаторов.
             </p>
           </div>
         </div>
 
-        <div className="admin-steps" aria-label="Будущий процесс модерации">
-          <span>1. Новое пожелание</span>
-          <span>2. Проверка организатором</span>
+        <div className="admin-steps" aria-label="Будущий процесс обновления контента">
+          <span>1. Вход организатора</span>
+          <span>2. Обновление данных</span>
           <span>3. Публикация на сайте</span>
         </div>
       </div>
