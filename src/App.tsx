@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import type { ReactNode } from 'react'
+import type { FormEvent, ReactNode } from 'react'
 import {
   ArrowRight,
   Award,
@@ -458,6 +458,87 @@ function useEventState() {
   }
 }
 
+function useAdminAuth() {
+  const [authenticated, setAuthenticated] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  const loadSession = async () => {
+    try {
+      const response = await fetch('/api/admin/session')
+
+      if (!response.ok) {
+        throw new Error('Не удалось проверить вход')
+      }
+
+      const data = (await response.json()) as { authenticated?: boolean }
+      setAuthenticated(Boolean(data.authenticated))
+      setError('')
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : 'Ошибка авторизации')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const login = async (loginValue: string, passwordValue: string) => {
+    setLoading(true)
+
+    try {
+      const response = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          login: loginValue,
+          password: passwordValue,
+        }),
+      })
+
+      const data = (await response.json()) as { authenticated?: boolean; message?: string }
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Не удалось войти')
+      }
+
+      setAuthenticated(Boolean(data.authenticated))
+      setError('')
+    } catch (requestError) {
+      setAuthenticated(false)
+      setError(requestError instanceof Error ? requestError.message : 'Ошибка авторизации')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const logout = async () => {
+    setLoading(true)
+
+    try {
+      await fetch('/api/admin/logout', { method: 'POST' })
+      setAuthenticated(false)
+      setError('')
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : 'Ошибка выхода')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    void loadSession()
+  }, [])
+
+  return {
+    authenticated,
+    loading,
+    error,
+    login,
+    logout,
+  }
+}
+
 function App() {
   return (
     <Routes>
@@ -871,6 +952,20 @@ function GamePage() {
 
 function AdminPage() {
   const { nominationsRevealed, loading, error, setNominationsRevealed } = useEventState()
+  const {
+    authenticated,
+    loading: authLoading,
+    error: authError,
+    login,
+    logout,
+  } = useAdminAuth()
+  const [loginValue, setLoginValue] = useState('')
+  const [passwordValue, setPasswordValue] = useState('')
+
+  const handleLogin = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    void login(loginValue, passwordValue)
+  }
 
   return (
     <section className="admin-page page-shell">
@@ -878,17 +973,47 @@ function AdminPage() {
         icon={<LockKeyhole size={24} />}
         label="Для организаторов"
         title="Админ-панель"
-        text="Здесь позже появится рабочее место для обновления контента сайта после подключения backend и авторизации."
+        text=""
       />
 
       <div className="admin-placeholder">
+        {!authenticated && (
+          <form className="admin-login-card" onSubmit={handleLogin}>
+            <LockKeyhole size={34} />
+            <div>
+              <h2>Вход</h2>
+              <label htmlFor="admin-login">Логин</label>
+              <input
+                id="admin-login"
+                value={loginValue}
+                onChange={(event) => setLoginValue(event.target.value)}
+                placeholder="Введите логин"
+                autoComplete="username"
+              />
+              <label htmlFor="admin-password">Пароль</label>
+              <input
+                id="admin-password"
+                value={passwordValue}
+                onChange={(event) => setPasswordValue(event.target.value)}
+                type="password"
+                placeholder="Введите пароль"
+                autoComplete="current-password"
+              />
+              <button type="submit" disabled={authLoading}>
+                Войти
+              </button>
+              {authError && <p className="admin-error">{authError}</p>}
+            </div>
+          </form>
+        )}
+
+        {authenticated && (
         <div className="admin-card">
           <ShieldCheck size={34} />
           <div>
             <h2>Управление номинациями</h2>
             <p>
-              Открой или закрой победителей номинаций для всех пользователей сайта. Сейчас админка
-              работает без пароля.
+              Открой или закрой победителей номинаций для всех пользователей сайта.
             </p>
             <div className="admin-live-control">
               <span className={nominationsRevealed ? 'status-pill is-open' : 'status-pill is-closed'}>
@@ -911,9 +1036,13 @@ function AdminPage() {
                 </button>
               </div>
               {error && <p className="admin-error">{error}</p>}
+              <button className="logout-button" type="button" onClick={() => void logout()}>
+                Выйти
+              </button>
             </div>
           </div>
         </div>
+        )}
 
         <div className="admin-steps" aria-label="Будущий процесс обновления контента">
           <span>1. Вход организатора</span>
@@ -966,7 +1095,7 @@ function PageIntro({
         {label}
       </div>
       <h1>{title}</h1>
-      <p>{text}</p>
+      {text && <p>{text}</p>}
     </div>
   )
 }

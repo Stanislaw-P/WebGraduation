@@ -746,6 +746,7 @@ h3 {
 .nomination-card,
 .message-card,
 .message-form,
+.admin-login-card,
 .admin-card,
 .game-placeholder {
   border: 1px solid var(--line);
@@ -1234,6 +1235,7 @@ h3 {
   max-width: 860px;
 }
 
+.admin-login-card,
 .admin-card {
   display: grid;
   grid-template-columns: 64px minmax(0, 1fr);
@@ -1242,6 +1244,7 @@ h3 {
   padding: 26px;
 }
 
+.admin-login-card > svg,
 .admin-card > svg {
   display: flex;
   align-items: center;
@@ -1254,15 +1257,72 @@ h3 {
   background: linear-gradient(135deg, var(--brand), var(--cyan));
 }
 
+.admin-login-card h2,
 .admin-card h2 {
   font-size: clamp(28px, 4vw, 44px);
 }
 
+.admin-login-card p,
 .admin-card p {
   margin-top: 12px;
   color: var(--muted);
   font-size: 18px;
   line-height: 1.6;
+}
+
+.admin-login-card label {
+  display: block;
+  margin-top: 16px;
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.admin-login-card input {
+  width: 100%;
+  max-width: 360px;
+  min-height: 44px;
+  margin-top: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0 12px;
+  color: var(--ink);
+  background: var(--page);
+  outline: none;
+}
+
+.admin-login-card input:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand) 16%, transparent);
+}
+
+.admin-login-card button,
+.logout-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+  background: var(--surface);
+  font-weight: 800;
+}
+
+.admin-login-card button {
+  margin-top: 18px;
+  padding: 0 18px;
+}
+
+.admin-login-card button:not(:disabled):hover,
+.logout-button:hover {
+  border-color: color-mix(in srgb, var(--brand) 48%, var(--line));
+  color: var(--brand-strong);
+  background: var(--surface-soft);
+}
+
+.admin-login-card button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
 }
 
 .admin-live-control {
@@ -1324,6 +1384,11 @@ h3 {
 .admin-actions button:disabled {
   cursor: not-allowed;
   opacity: 0.48;
+}
+
+.logout-button {
+  width: fit-content;
+  padding: 0 14px;
 }
 
 .admin-error {
@@ -1605,6 +1670,7 @@ h3 {
     font-size: 13px;
   }
 
+  .admin-login-card,
   .admin-card {
     grid-template-columns: 1fr;
   }
