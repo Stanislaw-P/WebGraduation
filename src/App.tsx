@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { FormEvent, ReactNode } from 'react'
 import {
   ArrowRight,
@@ -54,6 +54,14 @@ type Wish = {
   x: number
   y: number
   rotate: number
+}
+
+type GameScore = {
+  id: string
+  playerName: string
+  timeSec: number
+  fives: number
+  createdAt: string
 }
 
 const directions: Direction[] = [
@@ -393,6 +401,18 @@ function getInitials(name: string) {
     .join('')
 }
 
+function formatScoreTime(seconds: number) {
+  const totalSeconds = Math.max(0, Math.floor(seconds))
+  const minutes = Math.floor(totalSeconds / 60) % 60
+  const restSeconds = totalSeconds % 60
+  const hours = Math.floor(totalSeconds / 3600)
+  const pad = (value: number) => String(value).padStart(2, '0')
+
+  return hours > 0
+    ? `${hours}:${pad(minutes)}:${pad(restSeconds)}`
+    : `${pad(minutes)}:${pad(restSeconds)}`
+}
+
 function useEventState() {
   const [nominationsRevealed, setNominationsRevealedState] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -536,6 +556,64 @@ function useAdminAuth() {
     error,
     login,
     logout,
+  }
+}
+
+function useGameLeaderboard(enabled = true) {
+  const [scores, setScores] = useState<GameScore[]>([])
+  const [total, setTotal] = useState(0)
+  const [loading, setLoading] = useState(enabled)
+  const [error, setError] = useState('')
+
+  const loadScores = useCallback(async () => {
+    if (!enabled) {
+      setScores([])
+      setTotal(0)
+      setLoading(false)
+      setError('')
+      return
+    }
+
+    setLoading(true)
+
+    try {
+      const response = await fetch('/api/game-scores')
+
+      if (!response.ok) {
+        throw new Error('Не удалось загрузить таблицу лидеров')
+      }
+
+      const data = (await response.json()) as { scores?: GameScore[]; total?: number }
+      setScores(Array.isArray(data.scores) ? data.scores : [])
+      setTotal(Number(data.total) || 0)
+      setError('')
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : 'Ошибка API')
+    } finally {
+      setLoading(false)
+    }
+  }, [enabled])
+
+  useEffect(() => {
+    void loadScores()
+
+    if (!enabled) {
+      return undefined
+    }
+
+    const intervalId = window.setInterval(() => {
+      void loadScores()
+    }, 5000)
+
+    return () => window.clearInterval(intervalId)
+  }, [enabled, loadScores])
+
+  return {
+    scores,
+    total,
+    loading,
+    error,
+    refresh: loadScores,
   }
 }
 
@@ -930,6 +1008,8 @@ function NominationsPage() {
 }
 
 function GamePage() {
+  const leaderboard = useGameLeaderboard()
+
   return (
     <section className="game-page page-shell">
       <PageIntro
@@ -939,8 +1019,17 @@ function GamePage() {
         text="Пройди четыре курса, переживи боссов-преподавателей и доберись до диплома."
       />
 
-      <div className="game-embed">
-        <ExamsGame />
+      <div className="game-layout">
+        <div className="game-embed">
+          <ExamsGame />
+        </div>
+
+        <GameLeaderboardCard
+          error={leaderboard.error}
+          loading={leaderboard.loading}
+          scores={leaderboard.scores}
+          total={leaderboard.total}
+        />
       </div>
     </section>
   )
@@ -955,12 +1044,39 @@ function AdminPage() {
     login,
     logout,
   } = useAdminAuth()
+  const leaderboard = useGameLeaderboard(authenticated)
   const [loginValue, setLoginValue] = useState('')
   const [passwordValue, setPasswordValue] = useState('')
+  const [leaderboardClearing, setLeaderboardClearing] = useState(false)
+  const [leaderboardClearError, setLeaderboardClearError] = useState('')
 
   const handleLogin = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     void login(loginValue, passwordValue)
+  }
+
+  const clearLeaderboard = async () => {
+    if (!window.confirm('Удалить файл с результатами игры? Это действие очистит таблицу лидеров.')) {
+      return
+    }
+
+    setLeaderboardClearing(true)
+    setLeaderboardClearError('')
+
+    try {
+      const response = await fetch('/api/admin/game-scores/clear', { method: 'POST' })
+
+      if (!response.ok) {
+        const data = (await response.json().catch(() => ({}))) as { message?: string }
+        throw new Error(data.message || 'Не удалось очистить таблицу лидеров')
+      }
+
+      await leaderboard.refresh()
+    } catch (requestError) {
+      setLeaderboardClearError(requestError instanceof Error ? requestError.message : 'Ошибка API')
+    } finally {
+      setLeaderboardClearing(false)
+    }
   }
 
   return (
@@ -1040,6 +1156,17 @@ function AdminPage() {
         </div>
         )}
 
+        {authenticated && (
+          <GameLeaderboardCard
+            admin
+            clearing={leaderboardClearing}
+            error={leaderboardClearError || leaderboard.error}
+            loading={leaderboard.loading}
+            scores={leaderboard.scores}
+            total={leaderboard.total}
+            onClear={() => void clearLeaderboard()}
+          />
+        )}
         <div className="admin-steps" aria-label="Будущий процесс обновления контента">
           <span>1. Вход организатора</span>
           <span>2. Обновление данных</span>
@@ -1047,6 +1174,75 @@ function AdminPage() {
         </div>
       </div>
     </section>
+  )
+}
+
+function GameLeaderboardCard({
+  admin = false,
+  clearing = false,
+  error,
+  loading,
+  onClear,
+  scores,
+  total,
+}: {
+  admin?: boolean
+  clearing?: boolean
+  error: string
+  loading: boolean
+  onClear?: () => void
+  scores: GameScore[]
+  total: number
+}) {
+  return (
+    <aside className={admin ? 'leaderboard-card is-admin' : 'leaderboard-card'}>
+      <div className="leaderboard-head">
+        <span className="leaderboard-icon">
+          <Award size={22} />
+        </span>
+        <div>
+          <span>Топ 5</span>
+          <h2>Таблица лидеров</h2>
+        </div>
+      </div>
+
+      {loading && <p className="leaderboard-muted">Загружаем результаты...</p>}
+      {error && <p className="admin-error">{error}</p>}
+
+      {!loading && !error && scores.length === 0 && (
+        <p className="leaderboard-muted">Пока никто не получил диплом в игре.</p>
+      )}
+
+      {scores.length > 0 && (
+        <ol className="leaderboard-list">
+          {scores.map((score, index) => (
+            <li key={score.id}>
+              <span className="leaderboard-place">{index + 1}</span>
+              <div>
+                <strong>{score.playerName}</strong>
+                <small>{score.fives} пятерок</small>
+              </div>
+              <time>{formatScoreTime(score.timeSec)}</time>
+            </li>
+          ))}
+        </ol>
+      )}
+
+      {admin && (
+        <div className="leaderboard-admin-tools">
+          <p className="leaderboard-muted">
+            Всего завершенных прохождений: {total}
+          </p>
+          <button
+            type="button"
+            disabled={clearing}
+            onClick={onClear}
+          >
+            {clearing ? 'Очищаем...' : 'Очистить таблицу'}
+          </button>
+        </div>
+      )}
+    </aside>
   )
 }
 

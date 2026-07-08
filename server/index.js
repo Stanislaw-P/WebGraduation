@@ -1,6 +1,6 @@
 import { createServer } from 'node:http'
 import { randomBytes } from 'node:crypto'
-import { readFile, writeFile } from 'node:fs/promises'
+import { readFile, unlink, writeFile } from 'node:fs/promises'
 import { existsSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -10,6 +10,7 @@ const __dirname = path.dirname(__filename)
 const rootDir = path.resolve(__dirname, '..')
 const distDir = path.join(rootDir, 'dist')
 const statePath = path.join(__dirname, 'data', 'event-state.json')
+const scoresPath = path.join(__dirname, 'data', 'game-scores.json')
 const envPath = path.join(rootDir, '.env')
 
 loadEnvFile(envPath)
@@ -75,6 +76,60 @@ async function readEventState() {
 async function writeEventState(nextState) {
   await writeFile(statePath, `${JSON.stringify(nextState, null, 2)}\n`, 'utf8')
   return nextState
+}
+
+async function readGameScores() {
+  if (!existsSync(scoresPath)) {
+    return []
+  }
+
+  const rawScores = await readFile(scoresPath, 'utf8')
+  const parsedScores = JSON.parse(rawScores)
+
+  return Array.isArray(parsedScores) ? parsedScores : []
+}
+
+async function writeGameScores(scores) {
+  await writeFile(scoresPath, `${JSON.stringify(scores, null, 2)}\n`, 'utf8')
+  return scores
+}
+
+async function deleteGameScores() {
+  if (existsSync(scoresPath)) {
+    await unlink(scoresPath)
+  }
+}
+
+function normalizePlayerName(value) {
+  return String(value || '')
+    .trim()
+    .replace(/\s+/g, ' ')
+    .slice(0, 30)
+}
+
+function getTopGameScores(scores, limit = 5) {
+  const bestByName = new Map()
+
+  for (const score of scores) {
+    if (!score.playerName || !Number.isFinite(score.timeSec) || !Number.isFinite(score.fives)) {
+      continue
+    }
+
+    const key = score.playerName.toLowerCase()
+    const current = bestByName.get(key)
+
+    if (
+      !current ||
+      score.timeSec < current.timeSec ||
+      (score.timeSec === current.timeSec && score.fives > current.fives)
+    ) {
+      bestByName.set(key, score)
+    }
+  }
+
+  return [...bestByName.values()]
+    .sort((first, second) => first.timeSec - second.timeSec || second.fives - first.fives)
+    .slice(0, limit)
 }
 
 function sendJson(response, statusCode, data, extraHeaders = {}) {
@@ -158,6 +213,47 @@ async function handleApi(request, response, pathname) {
     return true
   }
 
+  if (request.method === 'GET' && pathname === '/api/game-scores') {
+    const scores = await readGameScores()
+    sendJson(response, 200, {
+      scores: getTopGameScores(scores),
+      total: scores.length,
+    })
+    return true
+  }
+
+  if (request.method === 'POST' && pathname === '/api/game-scores') {
+    const result = await readJsonBody(request)
+    const playerName = normalizePlayerName(result.playerName)
+    const timeSec = Number(result.timeSec)
+    const fives = Number(result.fives)
+
+    if (!playerName || playerName.length < 2) {
+      sendJson(response, 400, { message: 'Введите имя игрока' })
+      return true
+    }
+
+    if (!Number.isFinite(timeSec) || timeSec <= 0 || !Number.isFinite(fives) || fives < 0) {
+      sendJson(response, 400, { message: 'Некорректный результат игры' })
+      return true
+    }
+
+    const scores = await readGameScores()
+    const score = {
+      id: randomBytes(8).toString('hex'),
+      playerName,
+      timeSec: Math.round(timeSec * 100) / 100,
+      fives: Math.floor(fives),
+      completed: true,
+      createdAt: new Date().toISOString(),
+    }
+
+    scores.push(score)
+    await writeGameScores(scores)
+    sendJson(response, 201, { score })
+    return true
+  }
+
   if (request.method === 'POST' && pathname === '/api/admin/login') {
     const credentials = await readJsonBody(request)
 
@@ -180,6 +276,39 @@ async function handleApi(request, response, pathname) {
     sendJson(response, 200, { authenticated: false }, {
       'Set-Cookie': `${sessionCookieName}=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0`,
     })
+    return true
+  }
+
+  if (request.method === 'GET' && pathname === '/api/admin/game-scores') {
+    if (!requireAdmin(request, response)) {
+      return true
+    }
+
+    const scores = await readGameScores()
+    sendJson(response, 200, {
+      scores: getTopGameScores(scores),
+      total: scores.length,
+    })
+    return true
+  }
+
+  if (request.method === 'DELETE' && pathname === '/api/admin/game-scores') {
+    if (!requireAdmin(request, response)) {
+      return true
+    }
+
+    await deleteGameScores()
+    sendJson(response, 200, { scores: [], total: 0 })
+    return true
+  }
+
+  if (request.method === 'POST' && pathname === '/api/admin/game-scores/clear') {
+    if (!requireAdmin(request, response)) {
+      return true
+    }
+
+    await deleteGameScores()
+    sendJson(response, 200, { scores: [], total: 0 })
     return true
   }
 

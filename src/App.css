@@ -1189,6 +1189,13 @@ h3 {
   min-height: 72svh;
 }
 
+.game-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  gap: 22px;
+  align-items: start;
+}
+
 .game-embed {
   display: grid;
   place-items: center;
@@ -1213,6 +1220,133 @@ h3 {
 .game-embed .exams-frame {
   border-radius: 8px;
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+}
+
+.leaderboard-card {
+  position: sticky;
+  top: 96px;
+  display: grid;
+  gap: 18px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--brand) 16%, transparent), transparent 34%),
+    var(--surface);
+  box-shadow: var(--shadow-soft);
+}
+
+.leaderboard-card.is-admin {
+  position: static;
+}
+
+.leaderboard-head {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.leaderboard-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--brand), var(--cyan));
+}
+
+.leaderboard-head span:not(.leaderboard-icon) {
+  color: var(--brand-strong);
+  font-weight: 800;
+}
+
+.leaderboard-head h2 {
+  font-size: clamp(24px, 3vw, 34px);
+}
+
+.leaderboard-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.leaderboard-list li {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  min-height: 64px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-soft);
+}
+
+.leaderboard-place {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  color: #ffffff;
+  background: var(--brand);
+  font-weight: 900;
+}
+
+.leaderboard-list strong,
+.leaderboard-list small {
+  display: block;
+}
+
+.leaderboard-list strong {
+  color: var(--ink);
+}
+
+.leaderboard-list small,
+.leaderboard-muted {
+  color: var(--muted);
+}
+
+.leaderboard-list time {
+  color: var(--brand-strong);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.leaderboard-admin-tools {
+  display: grid;
+  gap: 12px;
+}
+
+.leaderboard-admin-tools button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-height: 42px;
+  padding: 0 14px;
+  border: 1px solid color-mix(in srgb, #d14343 46%, var(--line));
+  border-radius: 8px;
+  color: #d14343;
+  background: color-mix(in srgb, #d14343 8%, var(--surface));
+  font-weight: 900;
+  transition:
+    background 160ms ease,
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.leaderboard-admin-tools button:not(:disabled):hover {
+  background: color-mix(in srgb, #d14343 14%, var(--surface));
+  transform: translateY(-1px);
+}
+
+.leaderboard-admin-tools button:disabled {
+  cursor: not-allowed;
+  opacity: 0.56;
 }
 
 .admin-page {
@@ -1664,6 +1798,10 @@ h3 {
     grid-template-columns: 1fr;
   }
 
+  .game-layout {
+    grid-template-columns: 1fr;
+  }
+
   .game-embed {
     min-height: 680px;
   }
@@ -1671,6 +1809,10 @@ h3 {
   .game-embed .exams-root {
     height: min(82svh, 760px);
     min-height: 620px;
+  }
+
+  .leaderboard-card {
+    position: static;
   }
 
   .graduate-card,
