@@ -603,7 +603,7 @@ function useGameLeaderboard(enabled = true) {
 
     const intervalId = window.setInterval(() => {
       void loadScores()
-    }, 5000)
+    }, 10000)
 
     return () => window.clearInterval(intervalId)
   }, [enabled, loadScores])
