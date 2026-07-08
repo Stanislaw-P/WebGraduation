@@ -1,0 +1,346 @@
+/* Стили игры «Экзамены». Всё — внутри .exams-root, чтобы не конфликтовать
+   со стилями сайта, в который встраивается компонент. */
+
+.exams-root {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh; /* мобильные браузеры с плавающей адресной строкой */
+  background: #10131a;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  overflow: hidden;
+}
+
+/* Портретная рамка 9:16 — как экран 1080×1920 */
+.exams-frame {
+  position: relative;
+  aspect-ratio: 9 / 16;
+  height: 100%;
+  max-width: 100%;
+  background: #000;
+  overflow: hidden;
+  touch-action: none;     /* отключаем скролл/зум внутри игры */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* На широких экранах рамка упирается в высоту, на узких — в ширину */
+@media (max-aspect-ratio: 9/16) {
+  .exams-frame { height: auto; width: 100%; }
+}
+
+/* ---------- Игровой экран ---------- */
+
+.game-screen, .game-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.game-canvas { display: block; }
+
+/* ---------- HUD ---------- */
+
+.hud {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 3%;
+  pointer-events: none;
+}
+.hud-score {
+  color: #fff;
+  font-size: clamp(16px, 5vmin, 32px);
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+.hud-lives { margin-top: 8px; display: flex; gap: 8px; }
+/* Сердечко из повёрнутого квадрата и двух полукругов */
+.heart {
+  position: relative;
+  width: clamp(16px, 4vmin, 26px);
+  height: clamp(16px, 4vmin, 26px);
+  background: #E53935;
+  transform: rotate(45deg);
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
+}
+.heart::before,
+.heart::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: inherit;
+}
+.heart::before { top: -50%; left: 0; }
+.heart::after  { top: 0; left: -50%; }
+.heart.lost { background: rgba(255, 255, 255, 0.3); filter: none; }
+
+.hud-boss {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 10px;
+  padding: 4px 8px;
+}
+.boss-hp {
+  width: clamp(14px, 3.5vmin, 22px);
+  height: clamp(14px, 3.5vmin, 22px);
+  background: #C62828;
+  border-radius: 50%;
+}
+.boss-hp.lost { background: rgba(255, 255, 255, 0.25); }
+
+.hud-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+.hud-time {
+  color: #fff;
+  font-size: clamp(14px, 4vmin, 26px);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 10px;
+  padding: 2px 10px;
+}
+
+.pause-btn {
+  pointer-events: auto;
+  width: clamp(40px, 10vmin, 64px);
+  height: clamp(40px, 10vmin, 64px);
+  border: none;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  font-size: clamp(14px, 4vmin, 24px);
+  cursor: pointer;
+}
+
+/* ---------- Оверлей экзамена-квиза ---------- */
+
+.quiz-overlay {
+  position: absolute;
+  top: 20%; /* ниже HUD и балкона-кафедры профессора */
+  left: 4%;
+  right: 4%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2vmin;
+  padding: 2.5vmin 3vmin;
+  border-radius: 16px;
+  background: rgba(16, 19, 26, 0.78);
+  color: #fff;
+  pointer-events: none;
+  text-align: center;
+}
+.quiz-intro {
+  font-size: clamp(18px, 5.5vmin, 34px);
+  font-weight: 800;
+}
+.quiz-prof {
+  font-size: clamp(13px, 3.6vmin, 20px);
+  font-weight: 700;
+  color: #FFD54F;
+}
+.quiz-hint {
+  font-size: clamp(13px, 3.6vmin, 20px);
+  opacity: 0.8;
+}
+.quiz-question {
+  font-size: clamp(15px, 4.4vmin, 26px);
+  font-weight: 700;
+  line-height: 1.25;
+}
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8vmin;
+  text-align: left;
+}
+.quiz-option {
+  font-size: clamp(13px, 3.8vmin, 22px);
+  padding: 0.8vmin 1.4vmin;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  transition: background 0.2s ease;
+}
+.quiz-option.correct { background: rgba(76, 175, 80, 0.55); }
+.quiz-option.wrong   { background: rgba(229, 57, 53, 0.55); }
+.quiz-letter {
+  display: inline-block;
+  min-width: 1.5em;
+  font-weight: 800;
+  color: #FFD600;
+}
+.quiz-result {
+  font-size: clamp(15px, 4.4vmin, 26px);
+  font-weight: 800;
+}
+.quiz-result.correct { color: #A5D6A7; }
+.quiz-result.wrong   { color: #EF9A9A; }
+
+/* ---------- Экранные кнопки управления ---------- */
+
+.touch-controls {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 4%;
+  pointer-events: none;
+}
+.touch-left { display: flex; gap: 4vmin; }
+.touch-btn {
+  pointer-events: auto;
+  width: clamp(56px, 16vmin, 110px);
+  height: clamp(56px, 16vmin, 110px);
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+  font-size: clamp(22px, 7vmin, 44px);
+  cursor: pointer;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.touch-btn:active { background: rgba(255, 255, 255, 0.45); }
+.touch-btn.jump {
+  width: clamp(68px, 20vmin, 130px);
+  height: clamp(68px, 20vmin, 130px);
+  background: rgba(41, 121, 255, 0.4);
+}
+.touch-btn.jump:active { background: rgba(41, 121, 255, 0.7); }
+
+/* ---------- Меню и оверлеи ---------- */
+
+.screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly; /* равномерно распределяем блоки по высоте — не наезжает на края */
+  align-items: center;
+  gap: 1.5vmin;
+  padding: 6% 8%;
+  overflow-y: auto; /* страховка на очень коротких экранах */
+  text-align: center;
+  color: #fff;
+}
+.menu-screen    { background: linear-gradient(160deg, #283593, #4a148c 70%, #311b92); }
+.gameover-screen{ background: linear-gradient(160deg, #c62828, #4a0d0d); }
+.victory-screen { background: linear-gradient(160deg, #2e7d32, #0d3311); }
+.diploma-screen { background: linear-gradient(160deg, #ffa726, #e65100); }
+
+/* Мягкая виньетка по краям всех экранов-меню */
+.menu-screen::after, .gameover-screen::after,
+.victory-screen::after, .diploma-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center,
+    transparent 55%, rgba(0, 0, 0, 0.35) 100%);
+}
+.screen > * { position: relative; z-index: 1; }
+
+.title-emoji {
+  font-size: clamp(48px, 16vmin, 110px);
+  margin: 0;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.4));
+  animation: float 3s ease-in-out infinite;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+
+.game-title {
+  font-size: clamp(40px, 14vmin, 96px);
+  letter-spacing: 0.08em;
+  margin: 0;
+  text-shadow: 0 4px 0 rgba(0, 0, 0, 0.25), 0 8px 18px rgba(0, 0, 0, 0.45);
+}
+.screen h1 {
+  font-size: clamp(24px, 7vmin, 48px);
+  margin: 0;
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+.subtitle { font-size: clamp(15px, 4.5vmin, 26px); opacity: 0.85; margin: 0; }
+.diploma { font-size: clamp(64px, 22vmin, 160px); }
+
+.last-time {
+  margin: 0;
+  font-size: clamp(14px, 3.8vmin, 22px);
+  font-weight: 700;
+  color: #FFD54F;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.9;
+}
+
+.credits {
+  position: absolute;
+  bottom: 4%;
+  left: 0;
+  right: 0;
+  margin: 0;
+  font-size: clamp(13px, 3.5vmin, 20px);
+  opacity: 0.7;
+}
+
+.menu-btn {
+  min-width: 60%;
+  padding: clamp(12px, 3vmin, 20px) clamp(20px, 5vmin, 40px);
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(#3d8bff, #2264d1);
+  color: #fff;
+  font-size: clamp(17px, 5vmin, 30px);
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.28), 0 8px 16px rgba(0, 0, 0, 0.3);
+  transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.15s ease;
+}
+.menu-btn:hover { filter: brightness(1.08); }
+.menu-btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.28), 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+.menu-btn.big { background: linear-gradient(#1ed760, #00a344); }
+.menu-btn.secondary {
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.35),
+    0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.6);
+}
+.menu-box {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5vmin;
+  align-items: center;
+  background: #1c2333;
+  border-radius: 20px;
+  padding: 6vmin;
+  min-width: 70%;
+  color: #fff;
+}
+.menu-box h2 { margin: 0 0 1vmin; font-size: clamp(22px, 7vmin, 44px); }

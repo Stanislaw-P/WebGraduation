@@ -4,7 +4,6 @@ import {
   ArrowRight,
   Award,
   BookOpen,
-  Code2,
   Gamepad2,
   GraduationCap,
   Globe,
@@ -24,6 +23,7 @@ import { Link, Outlet, Route, Routes, useLocation, useNavigate } from 'react-rou
 import facultyLogo from './assets/logo/logo-square.png'
 import facultyLogoFull from './assets/logo/logo-full.jpg'
 import deanPortrait from './assets/people/dean.png'
+import ExamsGame from './game/ExamsGame'
 import './App.css'
 
 type Direction =
@@ -935,16 +935,12 @@ function GamePage() {
       <PageIntro
         icon={<Gamepad2 size={24} />}
         label="Игра"
-        title="Игровая страница"
-        text="Здесь будет браузерная игра для выпускного. Сейчас оставлена аккуратная заглушка и место под будущий компонент."
+        title="Экзамены"
+        text="Пройди четыре курса, переживи боссов-преподавателей и доберись до диплома."
       />
 
-      <div className="game-placeholder">
-        <div className="game-orbit">
-          <Code2 size={34} />
-        </div>
-        <h2>Игра появится здесь</h2>
-        <p>Компонент можно будет подключить внутрь этой страницы без изменения остальной навигации.</p>
+      <div className="game-embed">
+        <ExamsGame />
       </div>
     </section>
   )

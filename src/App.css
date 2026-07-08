@@ -359,8 +359,7 @@ h3 {
 .hero-copy p,
 .section-title p,
 .page-intro p,
-.game-banner p,
-.game-placeholder p {
+.game-banner p {
   max-width: 680px;
   color: var(--muted);
   font-size: 18px;
@@ -747,8 +746,7 @@ h3 {
 .message-card,
 .message-form,
 .admin-login-card,
-.admin-card,
-.game-placeholder {
+.admin-card {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--surface);
@@ -1191,38 +1189,30 @@ h3 {
   min-height: 72svh;
 }
 
-.game-placeholder {
+.game-embed {
   display: grid;
   place-items: center;
-  min-height: 430px;
-  padding: 36px;
-  text-align: center;
-  background:
-    linear-gradient(90deg, color-mix(in srgb, var(--line) 45%, transparent) 1px, transparent 1px),
-    linear-gradient(color-mix(in srgb, var(--line) 45%, transparent) 1px, transparent 1px),
-    var(--surface);
-  background-size: 36px 36px;
-}
-
-.game-orbit {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 92px;
-  height: 92px;
-  margin-bottom: 18px;
+  min-height: 760px;
   border: 1px solid var(--line);
-  border-radius: 50%;
-  color: #ffffff;
-  background: linear-gradient(135deg, var(--brand), var(--cyan));
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 22% 18%, color-mix(in srgb, var(--brand) 18%, transparent), transparent 32%),
+    radial-gradient(circle at 78% 72%, color-mix(in srgb, var(--cyan) 14%, transparent), transparent 34%),
+    #10131a;
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
 }
 
-.game-placeholder h2 {
-  font-size: clamp(28px, 4vw, 44px);
+.game-embed .exams-root {
+  width: 100%;
+  height: min(78svh, 860px);
+  min-height: 680px;
+  background: transparent;
 }
 
-.game-placeholder p {
-  margin-top: 12px;
+.game-embed .exams-frame {
+  border-radius: 8px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
 }
 
 .admin-page {
@@ -1615,8 +1605,7 @@ h3 {
   .section-title p,
   .page-intro p,
   .speech-text p,
-  .game-banner p,
-  .game-placeholder p {
+  .game-banner p {
     font-size: 16px;
   }
 
@@ -1673,6 +1662,15 @@ h3 {
   .admin-login-card,
   .admin-card {
     grid-template-columns: 1fr;
+  }
+
+  .game-embed {
+    min-height: 680px;
+  }
+
+  .game-embed .exams-root {
+    height: min(82svh, 760px);
+    min-height: 620px;
   }
 
   .graduate-card,
