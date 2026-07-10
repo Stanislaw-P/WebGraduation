@@ -69,33 +69,33 @@ type GameScore = {
 }
 
 const graduates: Graduate[] = [
-  {
-    id: 1,
-    name: 'Гасиева Анна',
-    direction: 'Факультет математики и компьютерных наук',
-    photo: gassievaPhoto,
-    quote: 'Красный диплом',
-  },
-  {
-    id: 2,
-    name: 'Корень Екатерина',
-    direction: 'Факультет математики и компьютерных наук',
-    photo: korenPhoto,
-    quote: 'Красный диплом',
-  },
-  {
-    id: 3,
-    name: 'Корчагин Владимир',
-    direction: 'Факультет математики и компьютерных наук',
-    photo: vladimirPhoto,
-    quote: 'Красный диплом',
-  },
-  {
-    id: 4,
-    name: 'Сикоев Даниил',
-    direction: 'Факультет математики и компьютерных наук',
-    quote: 'Красный диплом',
-  },
+	{
+		id: 1,
+		name: 'Гасиева Анна',
+		direction: 'Педагогическое образование',
+		photo: gassievaPhoto,
+		quote: 'Красный диплом',
+	},
+	{
+		id: 2,
+		name: 'Корень Екатерина',
+		direction: 'Педагогическое образование',
+		photo: korenPhoto,
+		quote: 'Красный диплом',
+	},
+	{
+		id: 3,
+		name: 'Корчагин Владимир',
+		direction: 'Прикладная математика и информатика',
+		photo: vladimirPhoto,
+		quote: 'Красный диплом',
+	},
+	{
+		id: 4,
+		name: 'Сикоев Даниил',
+		direction: 'Прикладная математика и информатика',
+		quote: 'Красный диплом',
+	},
 ]
 
 const wishes: Wish[] = [
