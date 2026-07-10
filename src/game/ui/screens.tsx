@@ -35,7 +35,6 @@ export function MainMenu({
       {lastTime > 0 && (
         <p className="last-time">Последнее прохождение: {formatTime(lastTime)}</p>
       )}
-      <p className="credits">Создатель: Герман Тибилов</p>
     </div>
   );
 }

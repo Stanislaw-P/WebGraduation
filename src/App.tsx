@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import type { FormEvent, ReactNode } from 'react'
 import {
   ArrowRight,
@@ -23,6 +23,9 @@ import { Link, Outlet, Route, Routes, useLocation, useNavigate } from 'react-rou
 import facultyLogo from './assets/logo/logo-square.png'
 import facultyLogoFull from './assets/logo/logo-full.jpg'
 import deanPortrait from './assets/people/dean.png'
+import gassievaPhoto from './assets/people/gassieva.jpg'
+import korenPhoto from './assets/people/koren.jpg'
+import vladimirPhoto from './assets/people/vladimir.png'
 import ExamsGame from './game/ExamsGame'
 import './App.css'
 
@@ -34,7 +37,8 @@ type Direction =
 type Graduate = {
   id: number
   name: string
-  direction: Direction
+  direction: Direction | 'Факультет математики и компьютерных наук'
+  photo?: string
   quote: string
 }
 
@@ -64,36 +68,33 @@ type GameScore = {
   createdAt: string
 }
 
-const directions: Direction[] = [
-  'Прикладная математика и информатика',
-  'Информатика и вычислительная техника',
-  'Педагогическое образование',
-]
-
 const graduates: Graduate[] = [
   {
     id: 1,
-    name: 'Алан Кесаев',
-    direction: 'Прикладная математика и информатика',
-    quote: 'Если задача не решается, значит, пора переписать условие.',
+    name: 'Гасиева Анна',
+    direction: 'Факультет математики и компьютерных наук',
+    photo: gassievaPhoto,
+    quote: 'Красный диплом',
   },
   {
     id: 2,
-    name: 'Зарина Тедеева',
-    direction: 'Информатика и вычислительная техника',
-    quote: 'Главное - не забыть сохранить перед дедлайном.',
+    name: 'Корень Екатерина',
+    direction: 'Факультет математики и компьютерных наук',
+    photo: korenPhoto,
+    quote: 'Красный диплом',
   },
   {
     id: 3,
-    name: 'Сослан Битаров',
-    direction: 'Педагогическое образование',
-    quote: 'Объяснить сложное просто - тоже суперспособность.',
+    name: 'Корчагин Владимир',
+    direction: 'Факультет математики и компьютерных наук',
+    photo: vladimirPhoto,
+    quote: 'Красный диплом',
   },
   {
     id: 4,
-    name: 'Мадина Дзгоева',
-    direction: 'Прикладная математика и информатика',
-    quote: 'Формулы тоже умеют быть красивыми.',
+    name: 'Сикоев Даниил',
+    direction: 'Факультет математики и компьютерных наук',
+    quote: 'Красный диплом',
   },
   {
     id: 5,
@@ -328,63 +329,75 @@ const wishes: Wish[] = [
   },
 ]
 
-const teacherAuthors = [
-  'Руслан Черменович',
-  'Преподаватель матанализа',
-  'Преподаватель программирования',
-  'Преподаватель алгебры',
-  'Преподаватель информатики',
-  'Преподаватель педагогики',
-  'Преподаватель дискретной математики',
-  'Преподаватель кафедры ИВТ',
-  'Преподаватель факультета',
-  'Преподаватель кафедры ПМИ',
-  'Преподаватель операционных систем',
-  'Преподаватель математической логики',
-  'Преподаватель теории вероятностей',
-  'Преподаватель баз данных',
-  'Преподаватель численных методов',
-  'Преподаватель веб-разработки',
-  'Преподаватель кафедры педагогики',
-  'Преподаватель факультета',
+const teacherConstellationMessages = [
+  {
+    author: 'Кулаев Р. Ч.',
+    text: 'Пусть диплом станет началом дороги, на которой будет много смелых решений и хороших людей рядом.',
+  },
+  {
+    author: 'Тотиева Ж. Д.',
+    text: 'Напутствие: не бояться трудностей на жизненном пути - все легкие задачи и проблемы уже решены. Обрести веру в лучшее будущее. Пусть каждый из вас найдет свое место в жизни, состоится как Человек и Профессионал. А главное - не забывайте преподавателей и родной университет!',
+  },
+  {
+    author: 'Олисаев Э. Г.',
+    text: 'Желаю выпускникам здоровья и успехов в будущих начинаниях. Важно ставить перед собой серьезные цели и добиваться их достижения!',
+  },
+  {
+    author: 'Воронцова И. А.',
+    text: 'Дорогие наши выпускники! Факультет дал вам структуру, но истинная сила - в вашем внутреннем импульсе. Не позволяйте миру переопределять ваши переменные. Теперь ваш личный код имеет только один исполняемый файл - ваше Я. Помните, ваш внутренний компас точнее любого алгоритма извне. Теперь слушайте только ту логику, что резонирует с вашим сердцем. А мы всегда любим и ценим вас настоящих!',
+  },
+  {
+    author: 'Дзанагова И. Т.',
+    text: 'Жизнь - это код, написанный Создателем. Пусть там будет бесконечный цикл с условием проживать каждый день в любви.',
+  },
+  {
+    author: 'Гутнова А. К.',
+    text: 'Вы не заканчиваете - вы начинаете. Теперь только вперед!',
+  },
+  {
+    author: 'Койбаев В. А.',
+    text: 'За Математику, которая вас объединила! Вы потрясающие, умные и красивые! Счастья вам и удачи! Пусть Пруха будет всегда рядом с вами!',
+  },
+  {
+    author: 'Бичегкуев М. С.',
+    text: 'Самых наилучших пожеланий, чтоб хорошо устроились в жизни.',
+  },
+  {
+    author: 'Уртаева А. А.',
+    text: 'Гордимся вами и верим, что этот выпуск еще много раз удивит факультет.',
+  },
 ]
 
 const nominations: Nomination[] = [
   {
     id: 1,
-    title: 'Как он вообще выпустился?',
+    title: 'Лучший староста',
     winner: 'Алан Кесаев',
-    description: 'Номинация для человека, который прошел сюжет на максимальной сложности.',
+    description: 'Держал все под контролем и спасал от дедлайнов.',
   },
   {
     id: 2,
-    title: 'Топ 1 активист',
+    title: 'Топ-1 активист',
     winner: 'Элина Мамиева',
-    description: 'Всегда в центре движений, мероприятий и внезапных организационных задач.',
+    description: 'Душа факультета и двигатель движухи.',
   },
   {
     id: 3,
-    title: 'Самый стильный',
+    title: 'Гений импровизации',
     winner: 'Сослан Битаров',
-    description: 'Появляется так, будто даже расписание пар согласовано с образом.',
+    description: 'Находил решение даже без подготовки.',
   },
   {
     id: 4,
-    title: 'Давайте в фиагдон соберемся',
+    title: 'Министр опозданий',
     winner: 'Диана Хугаева',
-    description: 'Человек, который превращает любую паузу в план большой поездки.',
+    description: 'Превратил опоздания в отдельный жанр.',
   },
   {
     id: 5,
-    title: 'Каждый семестр обещает начать учиться',
+    title: 'Мистер “Понедельник”',
     winner: 'Тимур Габараев',
-    description: 'И каждый семестр почти убеждает всех, что на этот раз точно начнет.',
-  },
-  {
-    id: 6,
-    title: 'Наводящий тишину',
-    winner: 'Милана Созиева',
-    description: 'Достаточно одного взгляда, чтобы аудитория вспомнила про дисциплину.',
+    description: 'Каждый семестр обещал начать учиться.',
   },
 ]
 
@@ -622,7 +635,6 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
-        <Route path="graduates" element={<GraduatesPage />} />
         <Route path="nominations" element={<NominationsPage />} />
         <Route path="game" element={<GamePage />} />
         <Route path="admin" element={<AdminPage />} />
@@ -745,13 +757,13 @@ function HomePage() {
             номинации и цифровой архив этого дня.
           </p>
           <div className="hero-actions">
-            <Link className="primary-link" to="/graduates">
-              Смотреть выпускников
+            <a className="primary-link" href="#graduates-preview">
+              Смотреть отличников
               <ArrowRight size={18} />
-            </Link>
-            <a className="secondary-link" href="#wall">
-              Оставить пожелание
             </a>
+            <Link className="secondary-link" to="/game">
+              Играть
+            </Link>
           </div>
         </div>
 
@@ -773,18 +785,12 @@ function HomePage() {
           icon={<BookOpen size={22} />}
           label="Красный диплом"
           title="Выпускники с отличием"
-          text="На главной показываем 4 карточки выпускников с красным дипломом. Пока это временные данные, позже заменим их на реальные."
+          text=""
         />
         <div className="preview-grid honors-grid">
           {graduates.slice(0, 4).map((graduate) => (
             <GraduateCard key={graduate.id} graduate={graduate} compact />
           ))}
-        </div>
-        <div className="section-action">
-          <Link className="text-link" to="/graduates">
-            Открыть полный список
-            <ArrowRight size={18} />
-          </Link>
         </div>
       </section>
 
@@ -795,7 +801,7 @@ function HomePage() {
           icon={<Award size={22} />}
           label="Номинации"
           title="Легкая часть официального вечера"
-          text="Здесь будут победители заранее выбранных номинаций. Сейчас карточки временные, чтобы оценить формат."
+          text="Победители станут известны на мероприятии вручения дипломов."
         />
         <div className="nomination-row">
           {nominations.slice(0, 3).map((nomination) => (
@@ -820,8 +826,8 @@ function HomePage() {
             <Gamepad2 size={18} />
             Игра
           </div>
-          <h2>Отдельная игровая страница уже готова к подключению</h2>
-          <p>Пока здесь заглушка. Позже Герман закинет игру</p>
+          <h2>Пройди игру, попади в топ лучших и получи приз</h2>
+          <p>Собирай пятерки, доберись до диплома и сохрани результат в таблице лидеров.</p>
         </div>
         <Link className="primary-link" to="/game">
           Перейти к игре
@@ -917,7 +923,7 @@ function WallSection() {
             <polyline points="60,42 67,62" />
           </svg>
 
-          {wishes.slice(0, 9).map((wish, index) => (
+          {wishes.slice(0, teacherConstellationMessages.length).map((wish, index) => (
             <button
               className={`wish-star ${wish.x > 66 ? 'from-right' : ''} ${
                 wish.y < 45 ? 'from-top' : ''
@@ -925,58 +931,16 @@ function WallSection() {
               key={wish.id}
               style={{ left: `${wish.x}%`, top: `${wish.y}%` }}
               type="button"
-              aria-label={`${teacherAuthors[index]}: ${wish.text}`}
+              aria-label={`${teacherConstellationMessages[index].author}: ${teacherConstellationMessages[index].text}`}
             >
               <span className="star-core" />
               <span className={`wish-popover is-${wish.tone}`}>
-                <strong>{teacherAuthors[index]}</strong>
-                <span>{wish.text}</span>
+                <strong>{teacherConstellationMessages[index].author}</strong>
+                <span>{teacherConstellationMessages[index].text}</span>
               </span>
             </button>
           ))}
         </div>
-      </div>
-    </section>
-  )
-}
-
-function GraduatesPage() {
-  const [activeDirection, setActiveDirection] = useState<Direction | 'Все'>('Все')
-
-  const visibleGraduates = useMemo(() => {
-    if (activeDirection === 'Все') {
-      return graduates
-    }
-
-    return graduates.filter((graduate) => graduate.direction === activeDirection)
-  }, [activeDirection])
-
-  return (
-    <section className="page-shell">
-      <PageIntro
-        icon={<GraduationCap size={24} />}
-        label="Выпускники"
-        title="Список выпускников"
-        text="На первом этапе здесь временные данные. Структура уже рассчитана на полный список примерно из 150 человек."
-      />
-
-      <div className="filter-bar" aria-label="Фильтр по направлениям">
-        {(['Все', ...directions] as const).map((direction) => (
-          <button
-            key={direction}
-            className={activeDirection === direction ? 'is-active' : ''}
-            type="button"
-            onClick={() => setActiveDirection(direction)}
-          >
-            {direction}
-          </button>
-        ))}
-      </div>
-
-      <div className="graduates-grid">
-        {visibleGraduates.map((graduate) => (
-          <GraduateCard key={graduate.id} graduate={graduate} />
-        ))}
       </div>
     </section>
   )
@@ -991,7 +955,7 @@ function NominationsPage() {
         icon={<Award size={24} />}
         label="Номинации"
         title="Победители номинаций"
-        text="Список номинаций временный. Позже заменим названия, победителей и фотографии на реальные."
+        text="Победители номинаций будут открыты во время мероприятия вручения дипломов."
       />
 
       <div className="nominations-grid">
@@ -1020,8 +984,11 @@ function GamePage() {
       />
 
       <div className="game-layout">
-        <div className="game-embed">
-          <ExamsGame />
+        <div className="game-main">
+          <div className="game-embed">
+            <ExamsGame />
+          </div>
+          <p className="game-author">Игра создана Германом Тибиловым.</p>
         </div>
 
         <GameLeaderboardCard
@@ -1311,7 +1278,7 @@ function SectionTitle({
         {label}
       </div>
       <h2>{title}</h2>
-      <p>{text}</p>
+      {text && <p>{text}</p>}
     </div>
   )
 }
@@ -1343,7 +1310,11 @@ function GraduateCard({ graduate, compact = false }: { graduate: Graduate; compa
   return (
     <article className={compact ? 'graduate-card is-compact' : 'graduate-card'}>
       <div className="avatar-placeholder">
-        <span>{getInitials(graduate.name)}</span>
+        {graduate.photo ? (
+          <img src={graduate.photo} alt={graduate.name} />
+        ) : (
+          <span>{getInitials(graduate.name)}</span>
+        )}
       </div>
       <div className="graduate-info">
         <span className="direction">{graduate.direction}</span>
