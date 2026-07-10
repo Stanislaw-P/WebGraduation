@@ -13,6 +13,7 @@ dist-ssr
 *.local
 .env
 server/data/game-scores.json
+server/data/event-state.json
 
 # Editor directories and files
 .vscode/*
