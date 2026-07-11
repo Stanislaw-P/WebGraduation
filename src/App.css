@@ -1355,6 +1355,24 @@ h3 {
   transition: transform 180ms ease;
 }
 
+.nomination-lock-badge {
+  position: absolute;
+  right: calc(50% - 42px);
+  bottom: calc(50% - 42px);
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-radius: 999px;
+  color: #ffffff;
+  background: rgba(15, 23, 42, 0.72);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(8px);
+}
+
 .nomination-icon svg {
   transition: transform 180ms ease;
 }

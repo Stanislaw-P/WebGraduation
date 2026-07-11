@@ -4,11 +4,15 @@ import {
   ArrowRight,
   Award,
   BookOpen,
+  CalendarDays,
   Clock3,
+  ClipboardCheck,
   Gamepad2,
   GraduationCap,
   Globe,
+  Lightbulb,
   LockKeyhole,
+  Megaphone,
   Menu,
   MessageSquareText,
   Moon,
@@ -50,6 +54,7 @@ type Nomination = {
   title: string
   winner: string
   description: string
+  icon: ReactNode
 }
 
 type WishTone = 'blue' | 'mint' | 'lemon' | 'rose' | 'violet'
@@ -291,30 +296,35 @@ const teacherConstellationMessages = [
 const nominations: Nomination[] = [
   {
     id: 1,
+    icon: <ClipboardCheck size={34} />,
     title: 'Лучший староста',
     winner: 'Алан Кесаев',
     description: 'Держал все под контролем и спасал от дедлайнов.',
   },
   {
     id: 2,
+    icon: <Megaphone size={34} />,
     title: 'Топ-1 активист',
     winner: 'Элина Мамиева',
     description: 'Душа факультета и двигатель движухи.',
   },
   {
     id: 3,
+    icon: <Lightbulb size={34} />,
     title: 'Гений импровизации',
     winner: 'Сослан Битаров',
     description: 'Находил решение даже без подготовки.',
   },
   {
     id: 4,
+    icon: <Clock3 size={34} />,
     title: 'Министр опозданий',
     winner: 'Диана Хугаева',
     description: 'Превратил опоздания в отдельный жанр.',
   },
   {
     id: 5,
+    icon: <CalendarDays size={34} />,
     title: 'Мистер “Понедельник”',
     winner: 'Тимур Габараев',
     description: 'Каждый семестр обещал начать учиться.',
@@ -1269,7 +1279,12 @@ function NominationCard({
     <article className={revealed ? 'nomination-card is-revealed' : 'nomination-card is-locked'}>
       <div className="nomination-photo">
         <span className="nomination-glow" aria-hidden="true" />
-        <span className="nomination-icon">{revealed ? <Award size={28} /> : <LockKeyhole size={28} />}</span>
+        <span className="nomination-icon">{nomination.icon}</span>
+        {!revealed && (
+          <span className="nomination-lock-badge" aria-hidden="true">
+            <LockKeyhole size={16} />
+          </span>
+        )}
       </div>
       <div>
         <span>Номинация</span>
