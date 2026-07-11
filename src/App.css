@@ -730,6 +730,149 @@ h3 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.nominations-page {
+  position: relative;
+  isolation: isolate;
+}
+
+.nominations-page::before {
+  position: absolute;
+  inset: 26px -34px auto -34px;
+  z-index: -2;
+  height: min(520px, 64vh);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 18% 26%, color-mix(in srgb, var(--brand) 22%, transparent), transparent 30%),
+    radial-gradient(circle at 82% 18%, rgba(248, 200, 92, 0.14), transparent 28%),
+    radial-gradient(circle at 64% 76%, color-mix(in srgb, var(--cyan) 16%, transparent), transparent 32%);
+  content: '';
+  opacity: 0.72;
+  pointer-events: none;
+}
+
+.nomination-atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.nomination-atmosphere span {
+  position: absolute;
+  color: color-mix(in srgb, var(--brand) 42%, var(--ink));
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  font-size: clamp(18px, 2.6vw, 34px);
+  font-weight: 800;
+  opacity: 0.12;
+  transform: translate3d(0, 0, 0) rotate(-8deg);
+  animation: nomination-symbol-float 12s ease-in-out infinite;
+}
+
+.nomination-atmosphere span:nth-child(1) {
+  left: 3%;
+  top: 10%;
+}
+
+.nomination-atmosphere span:nth-child(2) {
+  left: 72%;
+  top: 8%;
+  animation-delay: -3s;
+}
+
+.nomination-atmosphere span:nth-child(3) {
+  left: 88%;
+  top: 26%;
+  animation-delay: -6s;
+}
+
+.nomination-atmosphere span:nth-child(4) {
+  left: 14%;
+  top: 46%;
+  animation-delay: -2s;
+}
+
+.nomination-atmosphere span:nth-child(5) {
+  left: 49%;
+  top: 18%;
+  color: rgba(248, 200, 92, 0.68);
+  animation-delay: -5s;
+}
+
+.nomination-atmosphere span:nth-child(6) {
+  left: 78%;
+  top: 66%;
+  animation-delay: -9s;
+}
+
+.nomination-atmosphere span:nth-child(7) {
+  left: 5%;
+  top: 78%;
+  animation-delay: -7s;
+}
+
+.nomination-atmosphere span:nth-child(8) {
+  left: 34%;
+  top: 72%;
+  color: color-mix(in srgb, var(--cyan) 48%, var(--ink));
+  animation-delay: -4s;
+}
+
+.nomination-atmosphere span:nth-child(9) {
+  left: 58%;
+  top: 52%;
+  animation-delay: -10s;
+}
+
+.nomination-atmosphere span:nth-child(10) {
+  left: 25%;
+  top: 24%;
+  color: rgba(248, 200, 92, 0.55);
+  animation-delay: -8s;
+}
+
+.nomination-atmosphere span:nth-child(11) {
+  left: 92%;
+  top: 82%;
+  animation-delay: -1s;
+}
+
+.nomination-atmosphere span:nth-child(12) {
+  left: 43%;
+  top: 92%;
+  animation-delay: -11s;
+}
+
+.nominations-page .page-intro,
+.nominations-page .nominations-grid {
+  position: relative;
+  z-index: 1;
+}
+
+.nominations-page .nominations-grid {
+  gap: 22px;
+}
+
+.nominations-page .nomination-card {
+  animation: nomination-card-enter 560ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.nominations-page .nomination-card:nth-child(2) {
+  animation-delay: 70ms;
+}
+
+.nominations-page .nomination-card:nth-child(3) {
+  animation-delay: 140ms;
+}
+
+.nominations-page .nomination-card:nth-child(4) {
+  animation-delay: 210ms;
+}
+
+.nominations-page .nomination-card:nth-child(5) {
+  animation-delay: 280ms;
+}
+
 .nomination-row {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1087,6 +1230,7 @@ h3 {
 }
 
 .nomination-card {
+  position: relative;
   display: grid;
   gap: 18px;
   padding: 20px;
@@ -1098,13 +1242,46 @@ h3 {
   will-change: transform;
 }
 
+.nomination-card::before {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    transparent 38%,
+    rgba(255, 255, 255, 0.16) 46%,
+    transparent 56%,
+    transparent 100%
+  );
+  content: '';
+  opacity: 0;
+  transform: translateX(-120%);
+  transition:
+    opacity 180ms ease,
+    transform 520ms ease;
+  pointer-events: none;
+}
+
 .nomination-card:hover {
   border-color: color-mix(in srgb, var(--brand) 48%, var(--line));
   box-shadow: 0 24px 58px color-mix(in srgb, var(--brand) 20%, transparent);
   transform: translateY(-6px);
 }
 
+.nomination-card:hover::before {
+  opacity: 1;
+  transform: translateX(120%);
+}
+
+.nomination-card.is-revealed {
+  border-color: rgba(248, 200, 92, 0.52);
+  box-shadow:
+    0 24px 70px color-mix(in srgb, var(--brand) 16%, transparent),
+    0 0 0 1px rgba(248, 200, 92, 0.12) inset;
+}
+
 .nomination-photo {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1117,9 +1294,38 @@ h3 {
     linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent),
     linear-gradient(135deg, var(--rose), var(--brand), var(--green));
   transition: filter 180ms ease;
+  overflow: hidden;
 }
 
-.nomination-photo svg {
+.nomination-glow {
+  position: absolute;
+  inset: 18%;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.36);
+  filter: blur(24px);
+  opacity: 0.26;
+  transform: scale(0.78);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.nomination-icon {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  transition: transform 180ms ease;
+}
+
+.nomination-icon svg {
   transition: transform 180ms ease;
 }
 
@@ -1127,14 +1333,42 @@ h3 {
   filter: brightness(1.05);
 }
 
-.nomination-card:hover .nomination-photo svg {
+.nomination-card:hover .nomination-glow {
+  opacity: 0.42;
+  transform: scale(1);
+}
+
+.nomination-card:hover .nomination-icon svg {
   transform: scale(1.12) rotate(-4deg);
+}
+
+.nomination-card.is-revealed .nomination-photo {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.24), transparent),
+    radial-gradient(circle at 28% 24%, rgba(255, 232, 159, 0.86), transparent 24%),
+    linear-gradient(135deg, #f8c85c, var(--brand), var(--cyan));
+}
+
+.nomination-card.is-revealed .nomination-glow {
+  background: rgba(255, 232, 159, 0.7);
+  opacity: 0.52;
+  animation: nomination-winner-glow 2.8s ease-in-out infinite;
+}
+
+.nomination-card.is-revealed .nomination-icon {
+  border-color: rgba(255, 255, 255, 0.58);
+  background: rgba(255, 255, 255, 0.2);
+  animation: nomination-winner-pop 720ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
 .nomination-card.is-locked .nomination-photo {
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.12), transparent),
     linear-gradient(135deg, #4c5873, #26324b);
+}
+
+.nomination-card.is-locked .nomination-icon {
+  animation: nomination-lock-pulse 2.6s ease-in-out infinite;
 }
 
 .nomination-card.is-locked strong {
@@ -1145,6 +1379,69 @@ h3 {
   display: block;
   margin-top: 12px;
   color: var(--ink);
+}
+
+@keyframes nomination-symbol-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-8deg);
+  }
+
+  50% {
+    transform: translate3d(14px, -18px, 0) rotate(5deg);
+  }
+}
+
+@keyframes nomination-card-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes nomination-lock-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(255, 255, 255, 0);
+  }
+
+  50% {
+    transform: scale(1.06);
+    box-shadow: 0 0 28px rgba(255, 255, 255, 0.2);
+  }
+}
+
+@keyframes nomination-winner-glow {
+  0%,
+  100% {
+    opacity: 0.42;
+    transform: scale(0.82);
+  }
+
+  50% {
+    opacity: 0.72;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes nomination-winner-pop {
+  0% {
+    transform: scale(0.72) rotate(-8deg);
+  }
+
+  65% {
+    transform: scale(1.08) rotate(4deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
 }
 
 .game-banner {
@@ -1882,9 +2179,12 @@ h3 {
 
 @media (prefers-reduced-motion: reduce) {
   .particle-field span,
+  .nomination-atmosphere span,
   .graduate-card,
   .nomination-card,
-  .nomination-photo {
+  .nomination-photo,
+  .nomination-glow,
+  .nomination-icon {
     animation: none;
     transition: none;
   }

@@ -26,7 +26,7 @@ import deanPortrait from './assets/people/dean.png'
 import gassievaPhoto from './assets/people/gassieva.jpg'
 import korenPhoto from './assets/people/koren.jpg'
 import vladimirPhoto from './assets/people/vladimir.png'
-import sikoevPhoto from './assets/people/cat.webp'
+import sikoevPhoto from './assets/people/cat.jpg'
 import ExamsGame from './game/ExamsGame'
 import './App.css'
 
@@ -318,6 +318,8 @@ const nominations: Nomination[] = [
     description: 'Каждый семестр обещал начать учиться.',
   },
 ]
+
+const nominationAtmosphereSymbols = ['π', '∑', 'λ', '{}', 'C#', '∞', '01', '∫', 'O(n)', '<T />', 'sin', 'Δ']
 
 const scrollItems = [
   { label: 'Главная', id: 'hero' },
@@ -868,7 +870,12 @@ function NominationsPage() {
   const { nominationsRevealed } = useEventState()
 
   return (
-    <section className="page-shell">
+    <section className={nominationsRevealed ? 'page-shell nominations-page is-revealed' : 'page-shell nominations-page'}>
+      <div className="nomination-atmosphere" aria-hidden="true">
+        {nominationAtmosphereSymbols.map((symbol) => (
+          <span key={symbol}>{symbol}</span>
+        ))}
+      </div>
       <PageIntro
         icon={<Award size={24} />}
         label="Номинации"
@@ -1253,7 +1260,8 @@ function NominationCard({
   return (
     <article className={revealed ? 'nomination-card is-revealed' : 'nomination-card is-locked'}>
       <div className="nomination-photo">
-        {revealed ? <Award size={28} /> : <LockKeyhole size={28} />}
+        <span className="nomination-glow" aria-hidden="true" />
+        <span className="nomination-icon">{revealed ? <Award size={28} /> : <LockKeyhole size={28} />}</span>
       </div>
       <div>
         <span>Номинация</span>
