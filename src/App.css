@@ -712,10 +712,40 @@ h3 {
   grid-template-columns: 180px minmax(0, 1fr);
   min-height: 260px;
   padding: 26px;
+  animation: honors-card-enter 560ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.honors-grid .graduate-card:nth-child(2) {
+  animation-delay: 80ms;
+}
+
+.honors-grid .graduate-card:nth-child(3) {
+  animation-delay: 160ms;
+}
+
+.honors-grid .graduate-card:nth-child(4) {
+  animation-delay: 240ms;
+}
+
+.honors-grid .graduate-card:hover {
+  border-color: rgba(248, 200, 92, 0.62);
+  box-shadow:
+    0 24px 70px rgba(248, 200, 92, 0.18),
+    0 18px 52px color-mix(in srgb, var(--brand) 16%, transparent),
+    0 0 0 1px rgba(248, 200, 92, 0.12) inset;
+  transform: translateY(-8px) rotate(-0.35deg);
 }
 
 .honors-grid .avatar-placeholder {
   font-size: 42px;
+  transition:
+    filter 180ms ease,
+    transform 180ms ease;
+}
+
+.honors-grid .graduate-card:hover .avatar-placeholder {
+  filter: saturate(1.08) brightness(1.04);
+  transform: scale(1.02);
 }
 
 .honors-grid .graduate-info h3 {
@@ -1379,6 +1409,18 @@ h3 {
   display: block;
   margin-top: 12px;
   color: var(--ink);
+}
+
+@keyframes honors-card-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
 }
 
 @keyframes nomination-symbol-float {
@@ -2181,6 +2223,7 @@ h3 {
   .particle-field span,
   .nomination-atmosphere span,
   .graduate-card,
+  .avatar-placeholder,
   .nomination-card,
   .nomination-photo,
   .nomination-glow,
@@ -2190,6 +2233,7 @@ h3 {
   }
 
   .graduate-card:hover,
+  .honors-grid .graduate-card:hover .avatar-placeholder,
   .nomination-card:hover,
   .nomination-card:hover .nomination-photo {
     transform: none;
